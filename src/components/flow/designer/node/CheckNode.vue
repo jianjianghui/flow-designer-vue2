@@ -3,11 +3,11 @@
 </template>
 
 <script>
-import NodeItem from "@/components/flow/designer/NodeItem";
 import NodeHandler from "@/components/flow/designer/NodeHandler";
+import NodeItem from "@/components/flow/designer/NodeItem";
 
 export default {
-  name: "ParallelNode",
+  name: "CheckNode",
   props: {
     nodeConfig: {
       node: NodeItem
@@ -15,13 +15,8 @@ export default {
     nodeHandler: NodeHandler
   },
   setup(props) {
-    /**
-     * @type {NodeItem}
-     */
     let node = props.nodeConfig.node;
-    let childNodeNames = node.childNodeNames;
-
-    return {node, childNodeNames}
+    return {node}
   }
 }
 </script>

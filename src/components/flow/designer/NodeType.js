@@ -5,7 +5,9 @@ class NodeType {
 
     static START = 'start';
     static END = 'end';
+    static PARALLEL_WRAP = 'parallel_wrap';
     static PARALLEL = 'parallel';
+    static CHECK = 'check';
     static #map = new Map();
 
     /**
@@ -23,7 +25,7 @@ class NodeType {
      *
      * @type {string}
      */
-   component;
+    component;
 
     /**
      *
@@ -31,11 +33,11 @@ class NodeType {
      * @param mode  {'single'|'wrap'}
      * @param component
      */
-   constructor(name,mode,component) {
-       this.name = name;
-       this.mode = mode;
-       this.component = component;
-   }
+    constructor(name, mode, component) {
+        this.name = name;
+        this.mode = mode;
+        this.component = component;
+    }
 
     /**
      *
@@ -43,30 +45,33 @@ class NodeType {
      * @param mode  {'single'|'wrap'} 节点类型模式
      * @param component {String} 组件名
      */
-   static registerNodeType(name,mode,component) {
-       let nodeType = new NodeType(name,mode,component);
-        this.#map.set(name,nodeType);
+    static registerNodeType(name, mode, component) {
+        let nodeType = new NodeType(name, mode, component);
+        this.#map.set(name, nodeType);
         return nodeType;
-   }
+    }
 
     /**
      * 获取节点类型
      * @param typeName
      * @return NodeType
      */
-   static getNodeType(typeName) {
-       return this.#map.get(typeName)
-   }
+    static getNodeType(typeName) {
+        return this.#map.get(typeName)
+    }
 
 }
 
 
-function initNodeTypes(){
-    NodeType.registerNodeType(NodeType.START,"single", "StartNode")
-    NodeType.registerNodeType(NodeType.END,"single", "EndNode")
-    NodeType.registerNodeType(NodeType.PARALLEL,"wrap", "ParallelNode")
+function initNodeTypes() {
+    NodeType.registerNodeType(NodeType.START, "single", "StartNode")
+    NodeType.registerNodeType(NodeType.CHECK, "single", "StartNode")
+    NodeType.registerNodeType(NodeType.END, "single", "EndNode")
+    NodeType.registerNodeType(NodeType.PARALLEL_WRAP, "wrap", "ParallelWrapNode")
+    NodeType.registerNodeType(NodeType.PARALLEL, "single", "ParallelNode")
 
 }
+
 initNodeTypes();
 
 export default NodeType;

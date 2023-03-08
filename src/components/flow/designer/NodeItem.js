@@ -16,7 +16,6 @@ class NodeItem {
      */
     content;
 
-
     /**
      * 节点类型
      * @desc 该值应该为 NodeType中已注册的名字
@@ -33,16 +32,24 @@ class NodeItem {
 
     /**
      * 后续节点
-     * @type {'nodeName'[]}
+     * @type {'nodeName'}
      */
-    nextNodeNames;
+    nextNodeName;
 
-    constructor(name,content,type,data,nextNodeNames) {
-       this.name = name;
-       this.content = content;
-       this.type = type;
-       this.data = data;
-       this.nextNodeNames = nextNodeNames;
+    /**
+     * 子节点
+     * @desc wrap类型的节点才会需要该字段，该字段是有意义的
+     * @type { 'nodeName'[]}
+     */
+    childNodeNames;
+
+    constructor(name, content, type, data, nextNodeName, childNodeNames) {
+        this.name = name;
+        this.content = content;
+        this.type = type;
+        this.data = data;
+        this.nextNodeName = nextNodeName;
+        this.childNodeNames = childNodeNames;
     }
 
     /**
@@ -51,11 +58,11 @@ class NodeItem {
      * @return NodeItem
      */
     static parse(obj) {
-        if(obj.constructor === NodeItem) {
+        if (obj?.constructor === NodeItem) {
             return obj;
         }
 
-        return new NodeItem(obj.name,obj.content,obj.type,obj.data,obj.nextNodeNames);
+        return new NodeItem(obj.name, obj.content, obj.type, obj.data, obj.nextNodeName, obj.childNodeNames);
     }
 }
 

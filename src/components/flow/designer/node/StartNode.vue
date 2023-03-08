@@ -1,10 +1,23 @@
 <template>
-<div>流程开始</div>
+  <div>{{ node.name }}</div>
 </template>
 
 <script>
+import NodeHandler from "@/components/flow/designer/NodeHandler";
+import NodeItem from "@/components/flow/designer/NodeItem";
+
 export default {
-  name: "StartNode"
+  name: "StartNode",
+  props: {
+    nodeConfig: {
+      node: NodeItem
+    },
+    nodeHandler: NodeHandler
+  },
+  setup(props) {
+    let node = props.nodeConfig.node;
+    return {node}
+  }
 }
 </script>
 

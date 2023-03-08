@@ -1,5 +1,6 @@
 import NodeItem from "@/components/flow/designer/NodeItem";
 import NodeType from "@/components/flow/designer/NodeType";
+
 class NodeHandler {
     /**
      * nodeMap
@@ -7,41 +8,89 @@ class NodeHandler {
      */
     #nodeMap = new Map();
 
+    /**
+     * @type {NodeItem}
+     */
     #startNode;
 
+    /**
+     * @type {NodeItem}
+     */
     #endNode;
+
     constructor(nodeData) {
-        Object.keys(nodeData).forEach(nodeName=>{
-            let node = NodeItem.parse(nodeData[nodeName]);
-            if(node.type ===NodeType.START) {
-                if(this.#startNode) {
+        nodeData.forEach(nodeItem => {
+            let node = NodeItem.parse(nodeItem);
+            if (node.type === NodeType.START) {
+                if (this.#startNode) {
                     throw new Error('【flow-designer】NodeHandler创建失败；只能有一个起始节点')
                 }
                 this.#startNode = node;
             }
 
-            if(node.type ===NodeType.END) {
-                if(this.#endNode) {
+            if (node.type === NodeType.END) {
+                if (this.#endNode) {
                     throw new Error('【flow-designer】NodeHandler创建失败；只能有一个结束节点')
                 }
                 this.#endNode = node;
             }
 
-            let nextNodeNames = node.nextNodeNames;
-            nextNodeNames.forEach(nextNodeName=>{
-                if(this.#nodeMap.has(nextNodeName)) {
-                    throw  new Error('【flow-designer】NodeHandler创建失败；后续节点不支持已被定义的节点')
-                }
-            })
             //core
-            this.#nodeMap.set(nodeName,node)
+            this.#nodeMap.set(node.name, node)
         })
 
-        if(!this.#startNode) {
+        if (!this.#startNode) {
             throw new Error('【flow-designer】NodeHandler创建失败；没有起始节点')
         }
-        if(!this.#endNode) {
+        if (!this.#endNode) {
             throw new Error('【flow-designer】NodeHandler创建失败；没有结束节点')
+        }
+
+        let node = this.#startNode;
+        let set = new Set();
+        try {
+            this.#check(set, node)
+        } catch (result) {
+            if (result.msg) {
+                throw new Error('【flow-designer】NodeHandler创建失败；' + result.msg)
+            }
+            throw new Error('【flow-designer】NodeHandler创建失败；' + result)
+        }
+
+        window.nodeHandler = this;
+
+    }
+
+    getMap() {
+        return this.#nodeMap;
+    }
+
+    #check(set, node) {
+        if (node.type === NodeType.END) {
+            return;
+        }
+        set.add(node.name);
+
+        //child
+        node.childNodeNames && node.childNodeNames.forEach(nodeName => {
+            this.#check(set, this.getNode(nodeName));
+        })
+
+        //next
+        if (!node.nextNodeName) {
+            return;
+        }
+        let nextNode = this.getNode(node.nextNodeName);
+        if (node.nextNodeName && !nextNode) {
+            throw {success: false, msg: `node:${node.name}的后续步骤不存在${node.nextNodeName}`};
+        }
+
+        console.log(node, node.nextNodeName, nextNode)
+        if (set.has(nextNode.name)) {
+            throw {success: false, msg: '不支持循环节点:' + nextNode.name};
+        }
+        if (nextNode) {
+            this.#check(set, nextNode);
         }
     }
 
@@ -66,11 +115,10 @@ class NodeHandler {
      * 是否拥有后续节点
      * @return boolean
      */
-    hasNextNodes(nodeName) {
+    hasNextNode(nodeName) {
         let node = this.#nodeMap.get(nodeName);
-        console.log(node)
-        let nextNodeNames = node.nextNodeNames;
-        return !!nextNodeNames.length;
+        let nextNodeName = node.nextNodeName;
+        return !!nextNodeName;
     }
 
     /**
@@ -80,20 +128,18 @@ class NodeHandler {
      */
     getNextNode(nodeName) {
         let node = this.#nodeMap.get(nodeName);
-        if(!node) {
+        if (!node) {
             throw new Error('【flow-designer】NodeHandler获取后续节点失败；指定节点不存在')
         }
-        let nextNodeNames = node.nextNodeNames;
-        if(!nextNodeNames.length) {
-            return null;
-        }
+        return this.getNode(node.nextNodeName)
+    }
 
-        if(nextNodeNames.length === 1) {
-            return this.getNode(nextNodeNames[0])
-        }
-
-        // judge or parallel
-
+    /**
+     * 是否拥有节点
+     * @return boolean
+     */
+    hasNode(nodeName) {
+        return this.#nodeMap.has(nodeName)
     }
 
     /**
@@ -112,19 +158,19 @@ class NodeHandler {
      * @param targetName target节点名
      * @param option {Object} 操作
      */
-    insertNode(sourceName,targetName,option) {
+    insertNode(sourceName, targetName, option) {
         let source = this.getNode(sourceName);
-        if(!source) {
+        if (!source) {
             throw new Error('【flow-designer】NodeHandler插入节点出错: source节点不存在')
         }
 
-        let nextNodeNames = source.nextNodeNames;
-        if(!nextNodeNames.includes(targetName)) {
+        let nextNodeNames = source.nextNodeName;
+        if (!nextNodeNames.includes(targetName)) {
             throw new Error('【flow-designer】NodeHandler插入节点出错：无法在两个不相邻的节点中插入')
         }
 
         let target = this.getNode(targetName);
-        if(target) {
+        if (target) {
             throw new Error('【flow-designer】NodeHandler插入节点出错: target节点不存在')
         }
 
@@ -139,17 +185,22 @@ class NodeHandler {
      * @param nodeName 节点名
      * @param node 更新内容
      */
-    updateNode(nodeName,node) {
-        if(!node) {
+    updateNode(nodeName, node) {
+        if (!node) {
             throw new Error('【flow-designer】NodeHandler更新节点出错: 更新内容不存在')
         }
         let original = this.getNode(nodeName);
-        if(original) {
-            throw new Error('【flow-designer】NodeHandler更新节点出错: 要更新的节点不存在')
+        if (original) {
+            throw new Error('【flow-designer】NodeHandler更新节点出错: 要更新的节点不存在:' + nodeName)
         }
 
         //TODO 更新操作
+        this.deleteNode(nodeName);
+        this.#nodeMap.set(node.name, node)
+    }
 
+    deleteNode(nodeName) {
+        this.#nodeMap.delete(nodeName)
     }
 
 }
