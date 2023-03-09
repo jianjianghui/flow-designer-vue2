@@ -2,7 +2,11 @@
   <div>
     <div class="branch-wrap">
       <div class="branch-box">
-        <div class="add-parallel" >add</div>
+        <div class="add-branch">
+          <a-button shape="round" size="small" style="background-color: #42b983;border-color: #42b983;" type="primary">
+            添加并行
+          </a-button>
+        </div>
         <template v-for="(childNodeName,index) of childNodeNames">
           <div :key="childNodeName" class="branch-item">
             <div class="branch-item-line"></div>
@@ -10,10 +14,10 @@
                        v-if="nodeHandler.hasNode(childNodeName)"
                        :node-config="{node:nodeHandler.getNode(childNodeName)}"
                        :node-handler="nodeHandler"/>
-            <div class="top-left-cover-line" v-if="index===0"></div>
-            <div class="bottom-left-cover-line" v-if="index===0"></div>
-            <div class="top-right-cover-line" v-if="index===childNodeNames.length-1"></div>
-            <div class="bottom-right-cover-line" v-if="index===childNodeNames.length-1"></div>
+            <div v-if="index===0" class="top-left-cover-line"></div>
+            <div v-if="index===0" class="bottom-left-cover-line"></div>
+            <div v-if="index===childNodeNames.length-1" class="top-right-cover-line"></div>
+            <div v-if="index===childNodeNames.length-1" class="bottom-right-cover-line"></div>
           </div>
         </template>
       </div>
@@ -35,7 +39,7 @@ export default {
     }
   },
   props: {
-      node: NodeItem,
+    node: NodeItem,
     nodeHandler: NodeHandler
   },
   setup(props) {
@@ -45,12 +49,12 @@ export default {
     let node = props.node;
     let childNodeNames = node.childNodeNames;
 
-    return { childNodeNames}
+    return {childNodeNames}
   }
 }
 </script>
 
 <style scoped>
 
-.add-parallel {justify-content: center;padding: 0px 10px;position: absolute;top: -16px;left: 50%;transform: translateX(-50%);transform-origin: center center;z-index: 1;display: inline-flex;align-items: center;}
+
 </style>

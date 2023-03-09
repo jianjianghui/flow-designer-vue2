@@ -71,7 +71,7 @@ class NodeType {
 
 function initNodeTypes() {
     NodeType.registerNodeType(NodeType.START, "single", "StartNode")
-    NodeType.registerNodeType(NodeType.CHECK, "single", "StartNode")
+    NodeType.registerNodeType(NodeType.CHECK, "single", "CheckNode")
     NodeType.registerNodeType(NodeType.END, "single", "EndNode")
     NodeType.registerNodeType(NodeType.PARALLEL_WRAP, "wrap", "ParallelWrapNode")
     NodeType.registerNodeType(NodeType.PARALLEL, "single", "ParallelNode")
