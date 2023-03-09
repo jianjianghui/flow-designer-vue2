@@ -1,11 +1,14 @@
 <template>
-  <div class="jjh-workflow-container">
-    <div class="zoom-box">zoom</div>
-    <div class="box-scale">
-      <node-wrap :node-config="{node:nodeHandler.getStartNode()}" :node-handler="nodeHandler"/>
-    </div>
-  </div>
-
+      <section class="jjh-workflow-container">
+        <div class="zoom-box">
+          <div  @click="zoom(+10)">+</div>
+          <div>{{zoomScale}}%</div>
+          <div @click="zoom(-10)">-</div>
+        </div>
+        <div class="box-scale" :style="'transform: scale('+zoomScale/100+'); transform-origin: 50% 0px 0px;'">
+          <node-wrap :node-config="{node:nodeHandler.getStartNode()}" :node-handler="nodeHandler"/>
+        </div>
+      </section>
 </template>
 
 <script>
@@ -18,9 +21,21 @@ export default {
   props: {
     nodeData: Array
   },
+  data() {
+    return {
+      zoomScale: 100
+    }
+  },
   setup(props) {
     let nodeHandler = new NodeHandler(props.nodeData);
     return {nodeHandler};
+  },
+  methods: {
+    zoom(num) {
+     this.zoomScale += num;
+    },
+
+
   }
 }
 </script>
@@ -30,15 +45,17 @@ export default {
 @line-color:#ccc;
 
 .jjh-workflow-container {
-  position: relative;
+  background-color: @bg-color;
+  overflow-x: auto;
+  width: 100%;
+
   .box-scale {
-    background-color: @bg-color;
     display: inline-block;position: relative;width: 100%;align-items: flex-start;justify-content: center;flex-wrap: wrap;min-width: min-content;
   }
 
   .zoom-box {
+    position: fixed;
     z-index: 999;
-    position: absolute;
     top: 20px;
     right: 20px;
   }
