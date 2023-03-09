@@ -1,9 +1,12 @@
 <template>
   <div>
     <div>
-      <component :is="component" :nodeConfig="nodeConfig" :nodeHandler="nodeHandler"/>
+      <div class="node-box">
+        <component :is="component" :nodeConfig="nodeConfig" :nodeHandler="nodeHandler"/>
+      </div>
+
       <div v-if="type !== NodeType.END">
-        +
+       <div>+</div>
       </div>
     </div>
     <node-wrap v-if="nodeHandler.hasNextNode(node.name)" :node-config="{node:nodeHandler.getNextNode(node.name)}"
@@ -44,5 +47,14 @@ export default {
 </script>
 
 <style scoped>
+.node-box {
+  display: inline-flex;
+  flex-direction: column;
+  position: relative;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 220px;
+  min-height: 72px;
+}
 
 </style>

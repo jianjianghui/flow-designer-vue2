@@ -48,7 +48,29 @@ export default {
     }, {
       name: 'xx',
       type: 'parallel',
-    }, {
+      nextNodeName:'并行wrap003'
+    },
+      {
+        name: '并行wrap003',
+        type: 'parallel_wrap',
+        nextNodeName: '结束节点',
+        childNodeNames: [
+          '并行wrap003-001',
+          '并行wrap003-002',
+          '并行wrap003-003'
+        ]
+      },
+      {
+        name: '并行wrap003-001',
+        type: 'parallel',
+      }, {
+        name: '并行wrap003-002',
+        type: 'parallel',
+      }, {
+        name: '并行wrap003-003',
+        type: 'parallel',
+      },
+      {
       name: '并行wrap001-003',
       type: 'parallel',
     }, {
