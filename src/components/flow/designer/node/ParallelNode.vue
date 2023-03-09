@@ -1,5 +1,6 @@
 <template>
-  <div>{{ node.name }}</div>
+  <div style="color: #718dff">{{ node.name }}</div>
+
 </template>
 
 <script>

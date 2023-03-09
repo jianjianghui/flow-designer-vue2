@@ -3,9 +3,16 @@
 
     <div class="zoom-box">
       <a-affix :offset-top="30">
-        <div @click="zoom(+10)">+</div>
-        <div>{{ zoomScale }}%</div>
-        <div @click="zoom(-10)">-</div>
+        <div style="display:flex;align-items: center;">
+          <a-button :disabled="zoomScale >= 150" shape="circle" @click="zoom(+10)">
+            +
+          </a-button>
+          <div style="margin: 10px">{{ zoomScale }}%</div>
+          <a-button :disabled="zoomScale <= 40" shape="circle" @click="zoom(-10)">
+            -
+          </a-button>
+        </div>
+
       </a-affix>
     </div>
     <div :style="'transform: scale('+zoomScale/100+'); transform-origin: 50% 0px 0px;'" class="box-scale">
@@ -46,6 +53,7 @@ export default {
 <style lang="less">
 @bg-color: #f6f8f9;
 @line-color: #ccc;
+@node-border-radius: 5px;
 
 .jjh-workflow-container {
   position: relative;
@@ -54,6 +62,7 @@ export default {
   width: 100%;
 
   .box-scale {
+    text-align: center;
     display: inline-block;
     position: relative;
     width: 100%;
@@ -71,6 +80,8 @@ export default {
   }
 
   .node-wrap {
+    text-align: center;
+    text-align: center;
     display: inline-flex;
     width: 100%;
     flex-flow: column wrap;
@@ -88,7 +99,7 @@ export default {
     min-height: 72px;
     flex-shrink: 0;
     background: rgb(255, 255, 255);
-    border-radius: 4px;
+    border-radius: @node-border-radius;
     cursor: pointer;
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .1);
   }
@@ -101,7 +112,7 @@ export default {
     min-height: 72px;
     flex-shrink: 0;
     background: rgb(255, 255, 255);
-    border-radius: 4px;
+    border-radius: @node-border-radius;
     cursor: pointer;
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .1);
   }

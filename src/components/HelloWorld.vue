@@ -27,7 +27,7 @@ export default {
     }, {
       name: '并行wrap001',
       type: 'parallel_wrap',
-      nextNodeName: '结束节点',
+      nextNodeName: '流程结束',
       childNodeNames: [
         '并行wrap001-001',
         '并行wrap001-002',
@@ -47,7 +47,7 @@ export default {
     }, {
       name: 'xx',
       type: 'parallel',
-      nextNodeName:'并行wrap003'
+      nextNodeName: '并行wrap003'
     },
       {
         name: '并行wrap003',
@@ -69,29 +69,29 @@ export default {
         type: 'parallel',
       },
       {
-      name: '并行wrap001-003',
-      type: 'parallel',
-    }, {
-      name: '并行wrap001-004',
-      type: 'parallel',
-    }, {
-      name: '并行wrap001-005',
-      type: 'parallel',
-    }, {
-      name: '并行wrap001-006',
-      type: 'parallel',
-    }, {
-      name: '并行wrap001-007',
-      type: 'parallel',
-    }, {
-      name: '并行wrap001-008',
-      type: 'parallel',
-    }, {
-      name: '并行wrap001-009',
-      type: 'parallel',
-    },
+        name: '并行wrap001-003',
+        type: 'parallel',
+      }, {
+        name: '并行wrap001-004',
+        type: 'parallel',
+      }, {
+        name: '并行wrap001-005',
+        type: 'parallel',
+      }, {
+        name: '并行wrap001-006',
+        type: 'parallel',
+      }, {
+        name: '并行wrap001-007',
+        type: 'parallel',
+      }, {
+        name: '并行wrap001-008',
+        type: 'parallel',
+      }, {
+        name: '并行wrap001-009',
+        type: 'parallel',
+      },
       {
-        name: '结束节点',
+        name: '流程结束',
         type: 'end'
       }
     ];
