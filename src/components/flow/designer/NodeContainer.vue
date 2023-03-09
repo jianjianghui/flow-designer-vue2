@@ -52,7 +52,7 @@ export default {
   .add-node-btn {user-select: none;width: 240px;padding: 32px 0px 32px;display: flex;justify-content: center;flex-shrink: 0;flex-grow: 1;}
   .add-node-btn span {}
 
-  .parallel-wrap{
+  .branch-wrap{
     display: flex;
     flex-flow: column wrap;
     align-items: center;
@@ -60,7 +60,7 @@ export default {
     width: 100%;
     flex-shrink: 0;
   }
-  .parallel-box{
+  .branch-box{
     display: flex;
     overflow: visible;
     min-height: 180px;
@@ -69,7 +69,7 @@ export default {
     border-top: 2px solid @line-color;
     position: relative;
   }
-  .parallel-item{
+  .branch-item{
     display: inline-flex;
     flex-direction: column;
     align-items: center;
@@ -85,7 +85,7 @@ export default {
       background: @line-color;
     }
   }
-  .parallel-item-line{
+  .branch-item-line{
     height: 40px;
     background-color:@line-color;
     width: 2px;

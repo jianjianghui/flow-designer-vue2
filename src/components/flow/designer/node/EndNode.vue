@@ -12,17 +12,10 @@ import NodeHandler from "@/components/flow/designer/NodeHandler";
 export default {
   name: "EndNode",
   props: {
-    nodeConfig: {
-      node: NodeItem
-    },
+    node: NodeItem,
     nodeHandler: NodeHandler
   },
-  setup(props) {
-    /**
-     * @type {NodeItem}
-     */
-    let node = props.nodeConfig.node;
-    return {node}
+  setup() {
   }
 }
 </script>

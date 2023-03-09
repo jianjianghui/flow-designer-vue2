@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div class="parallel-wrap">
-      <div class="parallel-box">
+    <div class="branch-wrap">
+      <div class="branch-box">
         <div class="add-parallel" >add</div>
         <template v-for="(childNodeName,index) of childNodeNames">
-          <div :key="childNodeName" class="parallel-item">
-            <div class="parallel-item-line"></div>
+          <div :key="childNodeName" class="branch-item">
+            <div class="branch-item-line"></div>
             <component :is="NodeWrap"
                        v-if="nodeHandler.hasNode(childNodeName)"
                        :node-config="{node:nodeHandler.getNode(childNodeName)}"
@@ -35,19 +35,17 @@ export default {
     }
   },
   props: {
-    nodeConfig: {
-      node: NodeItem
-    },
+      node: NodeItem,
     nodeHandler: NodeHandler
   },
   setup(props) {
     /**
      * @type {NodeItem}
      */
-    let node = props.nodeConfig.node;
+    let node = props.node;
     let childNodeNames = node.childNodeNames;
 
-    return {node, childNodeNames}
+    return { childNodeNames}
   }
 }
 </script>

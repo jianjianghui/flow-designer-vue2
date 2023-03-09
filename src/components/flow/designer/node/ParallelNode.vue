@@ -9,19 +9,10 @@ import NodeHandler from "@/components/flow/designer/NodeHandler";
 export default {
   name: "ParallelNode",
   props: {
-    nodeConfig: {
-      node: NodeItem
-    },
+    node: NodeItem,
     nodeHandler: NodeHandler
   },
-  setup(props) {
-    /**
-     * @type {NodeItem}
-     */
-    let node = props.nodeConfig.node;
-    let childNodeNames = node.childNodeNames;
-
-    return {node, childNodeNames}
+  setup() {
   }
 }
 </script>

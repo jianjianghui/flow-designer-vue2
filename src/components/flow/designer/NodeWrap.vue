@@ -2,7 +2,7 @@
   <div class="node-wrap">
     <div>
       <div :class="uiStyle[type]">
-        <component :is="component" :nodeConfig="nodeConfig" :nodeHandler="nodeHandler"/>
+        <component :is="component" :node="node" :nodeHandler="nodeHandler"/>
       </div>
 
       <div v-if="type !== NodeType.END">

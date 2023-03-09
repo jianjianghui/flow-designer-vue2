@@ -9,17 +9,10 @@ import NodeItem from "@/components/flow/designer/NodeItem";
 export default {
   name: "StartNode",
   props: {
-    nodeConfig: {
-      node: NodeItem
-    },
+    node: NodeItem,
     nodeHandler: NodeHandler
   },
-  setup(props) {
-    /**
-     * @type {NodeItem}
-     */
-    let node = props.nodeConfig.node;
-    return {node}
+  setup() {
   }
 }
 </script>
