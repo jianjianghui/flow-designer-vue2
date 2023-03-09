@@ -73,7 +73,11 @@ class NodeHandler {
 
         //child
         node.childNodeNames && node.childNodeNames.forEach(nodeName => {
-            this.#check(set, this.getNode(nodeName));
+            let childNode = this.getNode(nodeName);
+            if (!childNode) {
+                throw {success: false, msg: `node:${node.name}的子步骤不存在${nodeName}`};
+            }
+            this.#check(set,childNode);
         })
 
         //next
@@ -85,7 +89,6 @@ class NodeHandler {
             throw {success: false, msg: `node:${node.name}的后续步骤不存在${node.nextNodeName}`};
         }
 
-        console.log(node, node.nextNodeName, nextNode)
         if (set.has(nextNode.name)) {
             throw {success: false, msg: '不支持循环节点:' + nextNode.name};
         }

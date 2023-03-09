@@ -31,12 +31,11 @@ export default {
       childNodeNames: [
         '并行wrap001-001',
         '并行wrap001-002',
+        '并行wrap001-003',
         '并行wrap001-004',
         '并行wrap001-005',
         '并行wrap001-006',
         '并行wrap001-007',
-        '并行wrap001-008',
-        '并行wrap001-009',
       ]
     }, {
       name: '并行wrap001-001',
@@ -53,11 +52,10 @@ export default {
       {
         name: '并行wrap003',
         type: 'parallel_wrap',
-        nextNodeName: '结束节点',
         childNodeNames: [
           '并行wrap003-001',
           '并行wrap003-002',
-          '并行wrap003-003'
+          '并行wrap003-003',
         ]
       },
       {

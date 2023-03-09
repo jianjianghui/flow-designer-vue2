@@ -20,8 +20,15 @@
  * 3. 提供适配器对接其他工作流模型；
  * 4. 抽象出操作API，经可能保证页面与逻辑分离；方便支持其他构建用户界面的框架/ui框架；
  *
- *
  * ## 参考
+ * 感谢以下开源项目提供设计上的思路
+ * <ul>
+ *     <li>[scui](https://gitee.com/lolicode/scui)</li>
+ *     <li>[Workflow]https://github.com/StavinLi/Workflow</li>
+ * </ul>
+ *
+ *
+ *
  *
  */
 const info = {

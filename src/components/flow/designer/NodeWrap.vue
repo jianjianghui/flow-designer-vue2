@@ -1,14 +1,15 @@
 <template>
-  <div>
+  <div class="node-wrap">
     <div>
-      <div class="node-box">
+      <div :class="uiStyle[type]">
         <component :is="component" :nodeConfig="nodeConfig" :nodeHandler="nodeHandler"/>
       </div>
 
       <div v-if="type !== NodeType.END">
-       <div>+</div>
+       <add-node/>
       </div>
     </div>
+
     <node-wrap v-if="nodeHandler.hasNextNode(node.name)" :node-config="{node:nodeHandler.getNextNode(node.name)}"
                :node-handler="nodeHandler"/>
   </div>
@@ -20,6 +21,7 @@ import NodeItem from "@/components/flow/designer/NodeItem";
 import NodeType from "@/components/flow/designer/NodeType";
 import {ref} from "vue";
 import Nodes from "@/components/flow/designer/node";
+import AddNode from "@/components/flow/designer/AddNode";
 
 export default {
   name: "NodeWrap",
@@ -28,7 +30,7 @@ export default {
       return NodeType
     }
   },
-  components: {...Nodes},
+  components: {AddNode, ...Nodes},
   props: {
     nodeConfig: Object,
     nodeHandler: NodeHandler
@@ -41,20 +43,17 @@ export default {
     let nodeType = NodeType.getNodeType(type);
     let mode = nodeType.mode;
     let component = nodeType.component;
-    return {mode, type, component, node: ref(node)};
+
+    const uiStyle = {};
+    [NodeType.START].forEach(o=>uiStyle[o] = 'start-node-box');
+    // [NodeType.END].forEach(o=>uiStyle[o] = '');
+    [NodeType.CHECK,NodeType.PARALLEL,NodeType.JUDGE].forEach(o=>uiStyle[o] = 'node-box');
+    [NodeType.PARALLEL_WRAP,NodeType.JUDGE_WRAP].forEach(o=>uiStyle[o] = 'wrap-box');
+
+    return {mode, type, component, node: ref(node),uiStyle};
   }
 }
 </script>
 
 <style scoped>
-.node-box {
-  display: inline-flex;
-  flex-direction: column;
-  position: relative;
-  border-radius: 4px;
-  cursor: pointer;
-  width: 220px;
-  min-height: 72px;
-}
-
 </style>

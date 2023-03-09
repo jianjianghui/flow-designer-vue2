@@ -15,6 +15,9 @@ export default {
     nodeHandler: NodeHandler
   },
   setup(props) {
+    /**
+     * @type {NodeItem}
+     */
     let node = props.nodeConfig.node;
     return {node}
   }

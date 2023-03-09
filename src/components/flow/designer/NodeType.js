@@ -5,9 +5,15 @@ class NodeType {
 
     static START = 'start';
     static END = 'end';
+
+    static CHECK = 'check';
+
     static PARALLEL_WRAP = 'parallel_wrap';
     static PARALLEL = 'parallel';
-    static CHECK = 'check';
+
+    static JUDGE_WRAP = 'judge_wrap';
+    static JUDGE = 'judge';
+
     static #map = new Map();
 
     /**
