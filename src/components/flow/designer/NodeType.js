@@ -102,6 +102,7 @@ class NodeType {
         return this.#funcMap.get(typeName)();
     }
 
+
 }
 
 
@@ -109,16 +110,16 @@ function initNodeTypes() {
     NodeType.registerNodeType(NodeType.START, "single", "StartNode")
 
     NodeType.registerNodeType(NodeType.CHECK, "single", "CheckNode",
-        () => new NodeItem('审批人', '审批人', '请指定审批人', NodeType.CHECK));
+        () => new NodeItem('审批人', '审批人', null, NodeType.CHECK));
 
     NodeType.registerNodeType(NodeType.CC, "single", "CheckNode",
-        () => new NodeItem('抄送人', '抄送人', '请指定审批人', NodeType.CC));
+        () => new NodeItem('抄送人', '抄送人', null, NodeType.CC));
 
     NodeType.registerNodeType(NodeType.TRIGGER, "single", "CheckNode",
-        () => new NodeItem('触发器', '触发器', '请配置触发器', NodeType.TRIGGER));
+        () => new NodeItem('触发器', '触发器', null, NodeType.TRIGGER));
 
     NodeType.registerNodeType(NodeType.DELAY, "single", "CheckNode",
-        () => new NodeItem('延迟等待', '延迟等待', '请配置延时等待', NodeType.DELAY));
+        () => new NodeItem('延迟等待', '延迟等待', null, NodeType.DELAY));
 
     NodeType.registerNodeType(NodeType.END, "single", "EndNode")
 
@@ -136,8 +137,8 @@ function initNodeTypes() {
         () => {
             return [
                 new NodeItem('条件分支', '条件分支', '请配置延时等待', NodeType.JUDGE_WRAP, null, null, []),
-                new NodeItem('条件1', 'NodeHandler Automatic generated', '请设置条件', NodeType.JUDGE),
-                new NodeItem('条件2', 'NodeHandler Automatic generated', '请设置条件', NodeType.JUDGE),
+                new NodeItem('条件1', 'NodeHandler Automatic generated', null, NodeType.JUDGE),
+                new NodeItem('条件2', 'NodeHandler Automatic generated', null, NodeType.JUDGE),
             ];
         })
     NodeType.registerNodeType(NodeType.JUDGE, "single", "ParallelNode")

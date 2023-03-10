@@ -16,7 +16,8 @@
             <a-icon theme="filled" type="warning"/>
           </a-tooltip>
         </span>
-          <span style="padding-left: 5px">{{ node.content }}</span>
+          <span v-if="node.content" style="padding-left: 5px">{{ node.content }}</span>
+          <span v-else style="padding-left: 5px;color: #666;">{{ defaultContent }}</span>
         </span>
         <!--        <span v-if="false" class="content-right" @click.stop="more"> <a-icon type="right"/></span>-->
       </div>
@@ -47,6 +48,11 @@ export default {
   props: {
     node: NodeItem,
     nodeHandler: NodeHandler
+  },
+  data() {
+    return {
+      defaultContent: '请设置上报人'
+    }
   },
   setup() {
 

@@ -18,9 +18,21 @@ class NodeHandler {
 
     /**
      * parentNodeMap
-     * @type { Map<String,String[]> }
+     * @type { Map<String,String> }
      */
     #parentNodeMap = new Map();
+
+    /**
+     * branch
+     * @type {Map<String, String>}
+     */
+    #branchNodeMap = new Map();
+
+    /**
+     * 记录每次更改的code
+     * @type {Map<String, String>}
+     */
+    #nodeCodeVersionMap = new Map();
 
     /**
      * 起始节点
@@ -35,8 +47,22 @@ class NodeHandler {
     #endNode;
 
     #refreshFunc;
+    #addWrap
 
     constructor(nodeData) {
+        if (!nodeData || !nodeData.length) {
+            nodeData = [{
+                name: '上报人',
+                code: '上报人',
+                type: 'start',
+                nextNodeCode: '流程结束',
+            }, {
+                name: '流程结束',
+                code: '流程结束',
+                type: 'end'
+            }
+            ];
+        }
         nodeData.forEach(nodeItem => {
             let node = NodeItem.parse(nodeItem);
             if (node.type === NodeType.START) {
@@ -54,11 +80,7 @@ class NodeHandler {
             }
 
             //core
-            this.#nodeMap.set(node.code, node)
-            if (node.nextNodeCode) {
-                console.log(node.code)
-                this.addPre(node)
-            }
+            this.#addNode(node);
         })
 
         if (!this.#startNode) {
@@ -79,6 +101,17 @@ class NodeHandler {
             throw new Error('【flow-designer】NodeHandler创建失败；' + result)
         }
 
+        [...this.#nodeMap.values()].filter(node => node.isWrapNode())
+            .forEach((node) => node.childNodeCodes.forEach(branchNodeCode => this.#parentNodeMap.set(branchNodeCode, node.code)));
+
+        [...this.#nodeMap.values()].filter(node => node.isBranchNode()).forEach((node) => {
+            let nextNode = this.getNextNode(node.code);
+            while (nextNode) {
+                this.#branchNodeMap.set(nextNode.code, node.code);
+                nextNode = this.getNextNode(nextNode.code);
+            }
+        })
+
         window.nodeHandler = this;
     }
 
@@ -93,45 +126,15 @@ class NodeHandler {
         this.#refreshFunc();
     }
 
-    getMap() {
-        return this.#nodeMap;
-    }
-
-    getPreMap() {
-        return this.#preNodeMap;
-
-    }
-
-    #check(set, node) {
-        if (node.type === NodeType.END) {
-            return;
-        }
-        set.add(node.code);
-
-        //child
-        node.childNodeCodes && node.childNodeCodes.forEach(nodeCode => {
-            let childNode = this.getNode(nodeCode);
-            if (!childNode) {
-                throw {success: false, msg: `node:${node.name}的子步骤不存在${nodeCode}`};
-            }
-            this.#check(set, childNode);
-        })
-
-        //next
-        if (!node.nextNodeCode) {
-            return;
-        }
-        let nextNode = this.getNode(node.nextNodeCode);
-        if (node.nextNodeCode && !nextNode) {
-            throw {success: false, msg: `node:${node.name}的后续步骤不存在${node.nextNodeCode}`};
+    map() {
+        return {
+            node: this.#nodeMap,
+            preNode: this.#preNodeMap,
+            parentNodeMap: this.#parentNodeMap,
+            branchNodeMap: this.#branchNodeMap,
+            nodeCodeVersionMap: this.#nodeCodeVersionMap
         }
 
-        if (set.has(nextNode.code)) {
-            throw {success: false, msg: '不支持循环节点:' + nextNode.name};
-        }
-        if (nextNode) {
-            this.#check(set, nextNode);
-        }
     }
 
     /**
@@ -169,7 +172,7 @@ class NodeHandler {
     getNextNode(nodeCode) {
         let node = this.#nodeMap.get(nodeCode);
         if (!node) {
-            throw new Error('【flow-designer】NodeHandler获取后续节点失败；指定节点不存在')
+            throw new Error('【flow-designer】NodeHandler获取后续节点失败；指定节点不存在:' + nodeCode)
         }
         return this.getNode(node.nextNodeCode)
     }
@@ -191,42 +194,72 @@ class NodeHandler {
         return this.#nodeMap.get(nodeCode)
     }
 
+    /**
+     * 是否拥有上节点
+     * @param nodeCode
+     * @returns {boolean}
+     */
+    hasPreNode(nodeCode) {
+        return this.#preNodeMap.has(nodeCode)
+    }
+
+    /**
+     * 获取上节点
+     * @param nodeCode
+     * @returns {NodeItem}
+     */
     getPreNode(nodeCode) {
         return this.getNode(this.#preNodeMap.get(nodeCode));
     }
 
-
-    addNode(node) {
-        let code = node.code;
-        while (this.#nodeMap.has(node.code)) {
-            if (!NodeHandler.#codeIndex[code]) {
-                NodeHandler.#codeIndex[code] = 0;
-            }
-            node.code = code + NodeHandler.#codeIndex[code]++;
-        }
-
-        this.#nodeMap.set(node.code, node);
-        if (node.nextNodeCode) {
-            this.addPre(node)
-        }
-    }
-
-    addPre(node) {
-        this.#preNodeMap.delete(node.nextNodeCode)
-        if (node.nextNodeCode) {
-            this.#preNodeMap.set(node.nextNodeCode, node.code);
-        }
-
-    }
-
     /**
-     * 更新后续步骤
-     * @param node {NodeItem}
-     * @param nextNodeCode {string}
+     *
+     * @param nodeCode
      */
-    #updateNextNodeCode(node, nextNodeCode) {
-        node.nextNodeCode = nextNodeCode;
-        this.addPre(node)
+    hasWrapNode(nodeCode) {
+        let node = this.getNode(nodeCode);
+        let branchNode = node;
+        if (!node.isBranchNode()) {
+            branchNode = this.getBranchNode(node.code);
+        }
+        // 分支节点必有包装节点
+        return !!branchNode;
+    }
+
+    getWrapNode(nodeCode) {
+        let node = this.getNode(nodeCode);
+        let branchNode = node;
+        if (!node.isBranchNode()) {
+            branchNode = this.getBranchNode(node.code);
+        }
+        if (!branchNode) {
+            return null;
+        }
+
+        let wrapNodeCode = this.nowNodeCode(this.#parentNodeMap.get(branchNode.code));
+        return this.getNode(wrapNodeCode);
+    }
+
+    hasBranchNode(nodeCode) {
+        return this.#branchNodeMap.has(nodeCode);
+    }
+
+    getBranchNode(nodeCode) {
+        let branchNodeCode = this.nowNodeCode(this.#branchNodeMap.get(nodeCode));
+        return this.getNode(branchNodeCode);
+    }
+
+    nowNodeCode(nodeCode) {
+        if (!nodeCode) {
+            return null;
+        }
+        let code = nodeCode;
+        let newCode = this.#nodeCodeVersionMap.get(code);
+        while (newCode) {
+            code = newCode;
+            newCode = this.#nodeCodeVersionMap.get(code);
+        }
+        return code;
     }
 
     /**
@@ -238,7 +271,7 @@ class NodeHandler {
     insertNode(sourceCode, option) {
         let source = this.getNode(sourceCode);
         if (!source) {
-            throw new Error('【flow-designer】NodeHandler插入节点出错: source节点不存在')
+            throw new Error('【flow-designer】NodeHandler插入节点出错: source节点不存在:' + sourceCode)
         }
 
         let nextNodeCode = source.nextNodeCode;
@@ -250,8 +283,17 @@ class NodeHandler {
 
         if (nodeType.mode === 'single') {
             let node = NodeType.createNode(type);
-            this.addNode(node);
+            this.#addNode(node);
 
+            // branch
+            if (source.isBranchNode()) {
+                this.#branchNodeMap.set(node.code, source.code)
+            }
+            if (this.#branchNodeMap.has(source.code)) {
+                this.#branchNodeMap.set(node.code, this.#branchNodeMap.get(source.code))
+            }
+
+            // 如果source有后续节点，则跟新增的节点进行绑定
             if (target) {
                 this.#updateNextNodeCode(node, target.code);
             }
@@ -264,12 +306,13 @@ class NodeHandler {
 
             let nodeWrap = nodes[0];
 
-            this.addNode(nodeWrap);
+            this.#addNode(nodeWrap);
             let nodeWrapCode = nodeWrap.code;
             for (let i = 1; i < nodes.length; i++) {
                 let node = nodes[i];
                 node.code = nodeWrapCode + node.name;
-                this.addNode(node);
+                this.#addNode(node);
+                this.#parentNodeMap.set(node.code, nodeWrapCode)
                 nodeWrap.childNodeCodes.push(node.code)
             }
 
@@ -305,12 +348,13 @@ class NodeHandler {
         let nodeWrap = nodes[0];
         let node1 = nodes[1];
 
-        this.addNode(nodeWrap);
+        this.#addNode(nodeWrap);
         let nodeWrapCode = nodeWrap.code;
         for (let i = 1; i < nodes.length; i++) {
             let node = nodes[i];
             node.code = nodeWrapCode + node.name;
-            this.addNode(node);
+            this.#addNode(node);
+            this.#parentNodeMap.set(node.code, nodeWrapCode)
             nodeWrap.childNodeCodes.push(node.code)
         }
         let sourcePreNode = this.getPreNode(sourceCode);
@@ -325,6 +369,7 @@ class NodeHandler {
                 if (!nextNode) {
                     break;
                 }
+                this.#branchNodeMap.set(code, node1.code)
                 if (nextNode.type === NodeType.END) {
                     this.#updateNextNodeCode(this.getNode(code), null);
                     break;
@@ -340,6 +385,7 @@ class NodeHandler {
 
         this.refresh()
     }
+
 
     /**
      * 更新node
@@ -361,14 +407,115 @@ class NodeHandler {
         this.#nodeMap.set(node.code, node)
     }
 
+
     /**
      * 删除节点
-     * @param nodeName
+     * @param nodeCode
      */
-    deleteNode(nodeName) {
+    deleteNode(nodeCode) {
+        if (!this.hasNode(nodeCode)) {
+            throw new Error('【flow-designer】NodeHandler删除节点出错: 要删除的节点不存在:' + nodeCode)
+        }
+        let node = this.getNode(nodeCode);
+        if (node.isBranchNode()) {
+
+            return;
+        }
+
+        // normal node
+        let preNode = this.getPreNode(nodeCode);
+        let nextNode = this.getNextNode(nodeCode);
+        this.#updateNextNodeCode(preNode, nextNode?.code)
         //删除源节点
-        this.#nodeMap.delete(nodeName)
+        this.#nodeMap.delete(nodeCode);
+
+        this.refresh();
     }
+
+    #addNode(node, branchNodeCode, wrapNodeCode) {
+        let code = node.code;
+        while (this.#nodeMap.has(node.code)) {
+            if (!NodeHandler.#codeIndex[code]) {
+                NodeHandler.#codeIndex[code] = 0;
+            }
+            node.code = code + ++NodeHandler.#codeIndex[code];
+        }
+
+        code = node.code;
+        this.#nodeMap.set(code, node);
+        if (node.nextNodeCode) {
+            this.#addPre(node)
+        }
+
+        if (branchNodeCode) {
+            this.#branchNodeMap.set(code, branchNodeCode);
+        }
+        if (wrapNodeCode) {
+            this.#parentNodeMap.set(code, wrapNodeCode);
+        }
+    }
+
+
+    //-------------------------------------------
+    // 以下方法非必要请不要修改 ：：：：基础能力API
+    //-------------------------------------------
+    #check(set, node) {
+        if (node.type === NodeType.END) {
+            return;
+        }
+        set.add(node.code);
+
+        //child
+        node.childNodeCodes && node.childNodeCodes.forEach(nodeCode => {
+            let childNode = this.getNode(nodeCode);
+            if (!childNode) {
+                throw {success: false, msg: `node:${node.name}的子步骤不存在${nodeCode}`};
+            }
+            this.#check(set, childNode);
+        })
+
+        //next
+        if (!node.nextNodeCode) {
+            return;
+        }
+        let nextNode = this.getNode(node.nextNodeCode);
+        if (node.nextNodeCode && !nextNode) {
+            throw {success: false, msg: `node:${node.name}的后续步骤不存在${node.nextNodeCode}`};
+        }
+
+        if (set.has(nextNode.code)) {
+            throw {success: false, msg: '不支持循环节点:' + nextNode.name};
+        }
+        if (nextNode) {
+            this.#check(set, nextNode);
+        }
+    }
+
+    #addPre(node) {
+        this.#preNodeMap.delete(node.nextNodeCode)
+        if (node.nextNodeCode) {
+            this.#preNodeMap.set(node.nextNodeCode, node.code);
+        }
+
+    }
+
+    #addCodeVersion(oldCode, newCode) {
+        if (oldCode === newCode) {
+            return;
+        }
+        this.#nodeCodeVersionMap.set(oldCode, newCode);
+    }
+
+    /**
+     * 更新后续步骤
+     * @param node {NodeItem}
+     * @param nextNodeCode {string}
+     */
+    #updateNextNodeCode(node, nextNodeCode) {
+        node.nextNodeCode = nextNodeCode;
+        this.#addPre(node)
+    }
+
 
 }
 

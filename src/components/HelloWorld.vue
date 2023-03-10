@@ -16,17 +16,8 @@ export default {
   setup: (props) => {
     console.log(props)
 
-    let nodeData = [{
-      name: '起始节点',
-      code: '起始节点',
-      type: 'start',
-      nextNodeCode: '流程结束',
-    }, {
-      name: '流程结束',
-      code: '流程结束',
-      type: 'end'
-    }
-    ];
+
+    let nodeData = [];
 
     return {nodeData};
   }

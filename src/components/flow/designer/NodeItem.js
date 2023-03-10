@@ -1,3 +1,5 @@
+import NodeType from "@/components/flow/designer/NodeType";
+
 /**
  * 节点
  */
@@ -78,6 +80,27 @@ class NodeItem {
 
         return new NodeItem(obj.name, obj.code, obj.content, obj.type, obj.data, obj.nextNodeCode, obj.childNodeCodes);
     }
+
+
+    isBranchNode() {
+        return [NodeType.JUDGE, NodeType.PARALLEL].includes(this.type);
+    }
+
+    isHeadNode() {
+        return [NodeType.START, NodeType.JUDGE, NodeType.PARALLEL].includes(this.type);
+    }
+
+    isFootNode() {
+        return this.type === NodeType.END || !this.nextNodeCode;
+    }
+
+    /**
+     * 是否为包装节点、网关
+     */
+    isWrapNode() {
+        return [NodeType.PARALLEL_WRAP, NodeType.JUDGE_WRAP].includes(this.type);
+    }
+
 }
 
 export default NodeItem;

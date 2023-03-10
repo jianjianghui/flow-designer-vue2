@@ -22,7 +22,8 @@
             <a-icon theme="filled" type="warning"/>
           </a-tooltip>
         </span>
-          <span style="padding-left: 5px">{{ node.content }}</span>
+            <span v-if="node.content" style="padding-left: 5px">{{ node.content }}</span>
+          <span v-else style="padding-left: 5px;color: #666;">{{ defaultContent }}</span>
         </span>
         <span class="content-right">
           <a-popover v-model="visiblePopover" placement="rightTop" trigger="click">
@@ -32,7 +33,7 @@
           </template>
           <template #content>
             <div class="add-node-box">
-              <div v-for="(node,index) of nodes" :key="index" class="add-node-item" @click="warpNode(node.type)">
+              <div v-for="(node,index) of nodes" :key="index" class="add-node-item" @click="wrapNode(node.type)">
                 <div :style="'color:'+node.color+';'" class="icon">
                   <a-icon v-if="node.icon?.component" :component="node.icon.component"/>
                   <a-icon v-if="node.icon?.type" :type="node.icon.type"/>
@@ -74,6 +75,11 @@ export default {
     node: NodeItem,
     nodeHandler: NodeHandler
   },
+  data() {
+    return {
+      defaultContent: '请选择'
+    }
+  },
   setup({node, nodeHandler}) {
 
     // icon;
@@ -98,22 +104,22 @@ export default {
     let showPopover = () => visiblePopover.value = true;
     const popover = {visiblePopover, showPopover, hidePopover};
 
-    // warpNode
+    // wrapNode
     let nodes = [
       {name: '条件分支', type: NodeType.JUDGE_WRAP, icon: {type: 'share-alt'}, color: 'rgb(21, 188, 131)'},
       {name: '并行分支', type: NodeType.PARALLEL_WRAP, icon: {type: 'code'}, color: 'rgb(113, 141, 255)'},
     ];
 
-    let warpNode = function (type) {
+    let wrapNode = function (type) {
       nodeHandler.wrapNode(node.code, {type: type})
     }
-    let wrapNodeR = {nodes, warpNode};
+    let wrapNodeR = {nodes, wrapNode};
 
     return {icon, ...drawer, ...popover, ...wrapNodeR};
   },
   methods: {
     close() {
-      console.log(1)
+      this.nodeHandler.deleteNode(this.node.code)
     },
     click() {
       this.showDrawer()
