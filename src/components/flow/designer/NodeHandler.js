@@ -209,7 +209,7 @@ class NodeHandler {
      * @returns {NodeItem}
      */
     getPreNode(nodeCode) {
-        return this.getNode(this.#preNodeMap.get(nodeCode));
+        return this.getNode(this.nowNodeCode(this.#preNodeMap.get(nodeCode)));
     }
 
     /**
@@ -261,6 +261,11 @@ class NodeHandler {
         }
         return code;
     }
+
+
+    //-------------------------------------------
+    // 以下方法会更新数据结构!!! 请谨慎使用；
+    //-------------------------------------------
 
     /**
      * 插入节点
@@ -386,7 +391,6 @@ class NodeHandler {
         this.refresh()
     }
 
-
     /**
      * 更新node
      * @desc 更新节点的同时，回调所有的更新事件
@@ -406,7 +410,6 @@ class NodeHandler {
         // this.deleteNode(nodeName);
         this.#nodeMap.set(node.code, node)
     }
-
 
     /**
      * 删除节点
@@ -432,6 +435,11 @@ class NodeHandler {
         this.refresh();
     }
 
+
+    //-------------------------------------------
+    // 以下方法非必要请不要修改 ：：：：基础能力API
+    //-------------------------------------------
+
     #addNode(node, branchNodeCode, wrapNodeCode) {
         let code = node.code;
         while (this.#nodeMap.has(node.code)) {
@@ -455,10 +463,6 @@ class NodeHandler {
         }
     }
 
-
-    //-------------------------------------------
-    // 以下方法非必要请不要修改 ：：：：基础能力API
-    //-------------------------------------------
     #check(set, node) {
         if (node.type === NodeType.END) {
             return;
