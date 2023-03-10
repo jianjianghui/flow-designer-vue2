@@ -13,12 +13,9 @@ export default {
   props: {
     msg: String
   },
-  setup: (props) => {
-    console.log(props)
-
-
+  setup: () => {
+    //TODO API
     let nodeData = [];
-
     return {nodeData};
   }
 }

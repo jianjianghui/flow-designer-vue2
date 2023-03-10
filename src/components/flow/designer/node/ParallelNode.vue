@@ -1,32 +1,29 @@
 <template>
   <div>
     <div class="node" @click="click">
-      <div class="node-left">
-
+      <div :class="option.left?'':'disable'" class="node-left" @click.stop="toLeft">
+        <span> <a-icon v-if="option.left" class="icon" type="left"/></span>
       </div>
 
-      <!--      <a-icon theme="filled" type="code"/>-->
-      <!--      <a-icon theme="filled" type="control"/>-->
-      <!--      &lt;!&ndash;  触发器    &ndash;&gt;-->
-      <!--      <a-icon theme="filled" type="clock-circle"/>-->
-      <!--      <a-icon theme="filled" type="smile"/>-->
       <div class="node-content">
         <div class="title">
-          <span> <a-icon fill="" theme="filled" type="flag"/></span>
-          <span> 上报人</span>
-          <span v-if="false" class="title-right"> <a-icon class="close" type="close" @click="close"/></span>
+          <span class="title-main" style="margin-right: 5px"> <a-icon type="control"/></span>
+          <span class="title-main">{{ node.name }}</span>
+          <span class="title-right">
+            <a-icon class="close" type="close" @click.stop="close"/>
+            <span class="info">优先级1</span>
+          </span>
         </div>
         <div class="content">
-          <span class="content-left" @click.stop="more"> <a-icon type="left"/></span>
           <span class="content-main">
-          <span style="padding-left: 5px">{{ node.name }}</span>
+                  <span v-if="node.content">{{ node.content }}</span>
+          <span v-else style="color: #666;">{{ defaultContent }}</span>
         </span>
-          <span class="content-right" @click.stop="more"> <a-icon type="right"/></span>
         </div>
       </div>
 
-      <div class="node-right">
-        <span @click.stop="more"> <a-icon type="right"/></span>
+      <div :class="option.right?'':'disable'" class="node-right" @click.stop="toRight">
+        <span> <a-icon v-if="option.right" class="icon" type="right"/></span>
       </div>
 
     </div>
@@ -54,8 +51,14 @@ import {ref} from "vue";
 export default {
   name: "ParallelNode",
   props: {
+    option: {left: Boolean, right: Boolean},
     node: NodeItem,
     nodeHandler: NodeHandler
+  },
+  data() {
+    return {
+      defaultContent: '请设置条件'
+    }
   },
   setup() {
 
@@ -69,12 +72,16 @@ export default {
   },
   methods: {
     close() {
-      console.log(1)
+      console.log(12)
+      this.nodeHandler.deleteNode(this.node.code)
     },
     click() {
       this.showDrawer()
     },
-    more() {
+    toLeft() {
+      console.log(2)
+    },
+    toRight() {
       console.log(3)
     }
   },
@@ -86,20 +93,26 @@ export default {
 
 <style lang="less" scoped>
 @node-border-radius: 5px;
-@node-bg-color: #576a95;
+@node-bg-color: rgb(113, 141, 255);
 .node {
   text-align: left;
   border: 1px solid transparent;
   border-radius: @node-border-radius;
+  display: flex;
 
   .title .close {
     display: none;
-    color: #fff;
+    font-size: 16px;
 
     &:hover {
-      color: #ccc;
+      color: #f00;
 
     }
+  }
+
+  .title .info {
+    font-size: 14px;
+    display: inline-block;
   }
 
   &:hover {
@@ -112,43 +125,84 @@ export default {
 
   }
 
+  &:hover .title .info {
+    display: none;
+  }
+
+  .node-left {
+    margin-left: 1px;
+    border-top-left-radius: @node-border-radius;
+    border-bottom-left-radius: @node-border-radius;
+  }
+
+  .node-content {
+    width: 190px;
+  }
+
+  .node-right {
+    border-top-right-radius: @node-border-radius;
+    border-bottom-right-radius: @node-border-radius;
+  }
+
+  .node-left, .node-right {
+    width: 14px;
+    display: flex;
+    align-items: center;
+
+    span {
+      width: 14px;
+      height: 14px;
+    }
+
+    .icon {
+
+      display: none;
+    }
+
+    &:hover {
+      background-color: #eaeaea;
+
+
+      &:hover:is(.disable) {
+        background-color: #fff;
+      }
+    }
+  }
+}
+
+.node:hover .node-left:not(.disable),
+.node:hover .node-right:not(.disable) {
+  display: flex;
+
+  .icon {
+    display: inline-block;
+  }
 }
 
 .title {
-  border-top-left-radius: @node-border-radius;
-  border-top-right-radius: @node-border-radius;
-  padding: 5px 15px;
-  background-color: @node-bg-color;
-  color: white;
-  font-size: xx-small;
+
+  padding: 5px 5px;
+  font-size: 16px;
+
+
+  .title-main {
+    color: @node-bg-color;
+  }
 
   .title-right {
     position: absolute;
     right: 10px;
+    margin-right: 5px;
   }
 }
 
 
 .content {
   display: flex;
-  padding: 18px;
+  padding: 18px 5px;
   border-bottom-left-radius: @node-border-radius;
   border-bottom-right-radius: @node-border-radius;
 
-
-  .content-right {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    right: 5px;
-    height: 54px;
-    color: #ccc;
-
-  }
-
-  .content-right:hover {
-    color: #000;
-  }
 
   .content-main {
     display: flex;

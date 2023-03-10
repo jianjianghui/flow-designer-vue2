@@ -65,11 +65,11 @@ export default {
 
     let nodes = [
       {name: '审批人', type: NodeType.CHECK, icon: {component: checkIcon}, color: 'rgb(255, 148, 62)'},
-      {name: '抄送人', type: NodeType.CC, icon: {type: 'smile'}, color: 'rgb(255, 148, 62)'},
+      {name: '抄送人', type: NodeType.CC, icon: {type: 'mail'}, color: 'rgb(50, 150, 250);'},
       {name: '触发器', type: NodeType.TRIGGER, icon: {type: 'control'}, color: 'rgb(0,152,31)'},
       {name: '延迟等待', type: NodeType.DELAY, icon: {type: 'clock-circle'}, color: 'rgb(242, 86, 67)'},
-      {name: '条件分支', type: NodeType.JUDGE_WRAP, icon: {type: 'share-alt'}, color: 'rgb(21, 188, 131)'},
-      {name: '并行分支', type: NodeType.PARALLEL_WRAP, icon: {type: 'code'}, color: 'rgb(113, 141, 255)'},
+      {name: '条件分支', type: NodeType.JUDGE_WRAP, icon: {type: 'apartment'}, color: 'rgb(21, 188, 131)'},
+      {name: '并行分支', type: NodeType.PARALLEL_WRAP, icon: {type: 'sliders'}, color: 'rgb(113, 141, 255)'},
     ];
 
     let addNode = function (type) {

@@ -1,12 +1,6 @@
 <template>
   <div>
     <div :class="node.error?'error':''" class="node" @click="click">
-      <!--      <a-icon theme="filled" type="code"/>-->
-      <!--      <a-icon theme="filled" type="control"/>-->
-      <!--      &lt;!&ndash;  触发器    &ndash;&gt;-->
-      <!--      <a-icon theme="filled" type="clock-circle"/>-->
-      <!--      <a-icon theme="filled" type="smile"/>-->
-
       <div class="title">
         <span> <a-icon :component="icon"/></span>
         <span> {{ node.name }}</span>
@@ -28,8 +22,7 @@
         <span class="content-right">
           <a-popover v-model="visiblePopover" placement="rightTop" trigger="click">
              <template #title>
-            <span style="font-size: 18px">追加网关节点</span>
-               <!--            <a slot="content" @click="hide">Close</a>-->
+            <span style="font-size: 18px">追加分支</span>
           </template>
           <template #content>
             <div class="add-node-box">
@@ -106,8 +99,8 @@ export default {
 
     // wrapNode
     let nodes = [
-      {name: '条件分支', type: NodeType.JUDGE_WRAP, icon: {type: 'share-alt'}, color: 'rgb(21, 188, 131)'},
-      {name: '并行分支', type: NodeType.PARALLEL_WRAP, icon: {type: 'code'}, color: 'rgb(113, 141, 255)'},
+      {name: '条件分支', type: NodeType.JUDGE_WRAP, icon: {type: 'apartment'}, color: 'rgb(21, 188, 131)'},
+      {name: '并行分支', type: NodeType.PARALLEL_WRAP, icon: {type: 'sliders'}, color: 'rgb(113, 141, 255)'},
     ];
 
     let wrapNode = function (type) {
@@ -156,9 +149,10 @@ export default {
   .title .close {
     display: none;
     color: #fff;
+    font-size: 16px;
 
     &:hover {
-      color: #ccc;
+      color: #f00;
     }
   }
 

@@ -76,7 +76,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.node)
   }
 }
 </script>
@@ -104,7 +103,7 @@ export default {
     color: #fff;
 
     &:hover {
-      color: #ccc;
+      color: #f00;
 
     }
   }
