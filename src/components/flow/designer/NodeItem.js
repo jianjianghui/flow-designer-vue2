@@ -4,10 +4,16 @@
 class NodeItem {
 
     /**
-     * 标题/名称；全局唯一
+     * 标题/名称；
      * @type {String}
      */
     name;
+
+
+    /**
+     * 编码/全局唯一
+     */
+    code;
 
     /**
      * 内容
@@ -34,14 +40,14 @@ class NodeItem {
      * 后续节点
      * @type {'nodeName'}
      */
-    nextNodeName;
+    nextNodeCode;
 
     /**
      * 子节点
      * @desc wrap类型的节点才会需要该字段，该字段是有意义的
      * @type { 'nodeName'[]}
      */
-    childNodeNames;
+    childNodeCodes;
 
 
     /**
@@ -50,13 +56,14 @@ class NodeItem {
      */
     error;
 
-    constructor(name, content, type, data, nextNodeName, childNodeNames) {
+    constructor(name, code, content, type, data, nextNodeCode, childNodeCodes) {
         this.name = name;
+        this.code = code;
         this.content = content;
         this.type = type;
         this.data = data;
-        this.nextNodeName = nextNodeName;
-        this.childNodeNames = childNodeNames;
+        this.nextNodeCode = nextNodeCode;
+        this.childNodeCodes = childNodeCodes;
     }
 
     /**
@@ -69,7 +76,7 @@ class NodeItem {
             return obj;
         }
 
-        return new NodeItem(obj.name, obj.content, obj.type, obj.data, obj.nextNodeName, obj.childNodeNames);
+        return new NodeItem(obj.name, obj.code, obj.content, obj.type, obj.data, obj.nextNodeCode, obj.childNodeCodes);
     }
 }
 

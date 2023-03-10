@@ -8,7 +8,7 @@
       <!--      <a-icon theme="filled" type="smile"/>-->
 
       <div class="title">
-        <span> <a-icon fill="" theme="filled" type="flag"/></span>
+        <span> <a-icon :component="icon"/></span>
         <span> {{ node.name }}</span>
         <span class="title-right"> <a-icon class="close" type="close" @click.stop="close"/></span>
       </div>
@@ -22,19 +22,26 @@
             <a-icon theme="filled" type="warning"/>
           </a-tooltip>
         </span>
-          <span style="padding-left: 5px">{{ node.name }}</span>
+          <span style="padding-left: 5px">{{ node.content }}</span>
         </span>
-        <span class="content-right" @click.stop="more">
+        <span class="content-right">
           <a-popover v-model="visiblePopover" placement="rightTop" trigger="click">
-            <template #title>
-              <span>Title</span>
-               <a slot="content" @click="hidePopover">Close</a>
-            </template>
-            <template #content>
-              <p>Content</p>
-              <p>Content</p>
-            </template>
-            <a-icon type="plus" @click.stop="more"/>
+             <template #title>
+            <span style="font-size: 18px">追加网关节点</span>
+               <!--            <a slot="content" @click="hide">Close</a>-->
+          </template>
+          <template #content>
+            <div class="add-node-box">
+              <div v-for="(node,index) of nodes" :key="index" class="add-node-item" @click="warpNode(node.type)">
+                <div :style="'color:'+node.color+';'" class="icon">
+                  <a-icon v-if="node.icon?.component" :component="node.icon.component"/>
+                  <a-icon v-if="node.icon?.type" :type="node.icon.type"/>
+                </div>
+                <span>{{ node.name }}</span>
+              </div>
+            </div>
+          </template>
+            <a-icon type="plus" @click.stop="()=>{}"/>
           </a-popover>
         </span>
       </div>
@@ -59,6 +66,7 @@
 import NodeHandler from "@/components/flow/designer/NodeHandler";
 import NodeItem from "@/components/flow/designer/NodeItem";
 import {ref} from "vue";
+import NodeType from "@/components/flow/designer/NodeType";
 
 export default {
   name: "CheckNode",
@@ -66,7 +74,16 @@ export default {
     node: NodeItem,
     nodeHandler: NodeHandler
   },
-  setup() {
+  setup({node, nodeHandler}) {
+
+    // icon;
+    let icon = {
+      template: `
+          <svg  viewBox="0 0 1024 1024">
+            <path fill=" currentColor" d="M288 320a224 224 0 1 0 448 0 224 224 0 1 0-448 0zm544 608H160a32 32 0 0 1-32-32v-96a160 160 0 0 1 160-160h448a160 160 0 0 1 160 160v96a32 32 0 0 1-32 32z"></path>
+          </svg>
+      `
+    };
 
     // drawer support
     let visibleDrawer = ref(false);
@@ -78,9 +95,21 @@ export default {
     //  popover support
     let visiblePopover = ref(false);
     let hidePopover = () => visiblePopover.value = false;
-    const popover = {visiblePopover, hidePopover};
+    let showPopover = () => visiblePopover.value = true;
+    const popover = {visiblePopover, showPopover, hidePopover};
 
-    return {...drawer, ...popover};
+    // warpNode
+    let nodes = [
+      {name: '条件分支', type: NodeType.JUDGE_WRAP, icon: {type: 'share-alt'}, color: 'rgb(21, 188, 131)'},
+      {name: '并行分支', type: NodeType.PARALLEL_WRAP, icon: {type: 'code'}, color: 'rgb(113, 141, 255)'},
+    ];
+
+    let warpNode = function (type) {
+      nodeHandler.wrapNode(node.code, {type: type})
+    }
+    let wrapNodeR = {nodes, warpNode};
+
+    return {icon, ...drawer, ...popover, ...wrapNodeR};
   },
   methods: {
     close() {
@@ -90,11 +119,10 @@ export default {
       this.showDrawer()
     },
     more() {
-      console.log(3)
+      this.showPopover()
     }
   },
   mounted() {
-    console.log(this.node)
   }
 }
 </script>
@@ -105,6 +133,7 @@ export default {
 
 
 .node {
+  min-height: 72px;
   text-align: left;
   border: 1px solid transparent;
   border-radius: @node-border-radius;

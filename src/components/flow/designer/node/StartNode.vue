@@ -1,12 +1,6 @@
 <template>
   <div>
     <div :class="node.error?'error':''" class="node" @click="click">
-      <!--      <a-icon theme="filled" type="code"/>-->
-      <!--      <a-icon theme="filled" type="control"/>-->
-      <!--      &lt;!&ndash;  触发器    &ndash;&gt;-->
-      <!--      <a-icon theme="filled" type="clock-circle"/>-->
-      <!--      <a-icon theme="filled" type="smile"/>-->
-
       <div class="title">
         <span> <a-icon fill="" theme="filled" type="flag"/></span>
         <span> {{ node.name }}</span>
@@ -22,7 +16,7 @@
             <a-icon theme="filled" type="warning"/>
           </a-tooltip>
         </span>
-          <span style="padding-left: 5px">{{ node.name }}</span>
+          <span style="padding-left: 5px">{{ node.content }}</span>
         </span>
         <!--        <span v-if="false" class="content-right" @click.stop="more"> <a-icon type="right"/></span>-->
       </div>
@@ -85,6 +79,7 @@ export default {
 @node-border-radius: 5px;
 @node-bg-color: #576a95;
 .node {
+  min-height: 72px;
   text-align: left;
   border: 1px solid transparent;
   border-radius: @node-border-radius;

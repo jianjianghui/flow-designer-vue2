@@ -18,82 +18,14 @@ export default {
 
     let nodeData = [{
       name: '起始节点',
+      code: '起始节点',
       type: 'start',
-      nextNodeName: '审批节点',
+      nextNodeCode: '流程结束',
     }, {
-      name: '审批节点',
-      type: 'check',
-      nextNodeName: '并行wrap001',
-    }, {
-      name: '并行wrap001',
-      type: 'parallel_wrap',
-      nextNodeName: '流程结束',
-      childNodeNames: [
-        '并行wrap001-001',
-        '并行wrap001-002',
-        '并行wrap001-003',
-        '并行wrap001-004',
-        '并行wrap001-005',
-        '并行wrap001-006',
-        '并行wrap001-007',
-      ]
-    }, {
-      name: '并行wrap001-001',
-      type: 'parallel',
-    }, {
-      name: '并行wrap001-002',
-      type: 'parallel',
-      nextNodeName: 'xx',
-    }, {
-      name: 'xx',
-      type: 'parallel',
-      nextNodeName: '并行wrap003'
-    },
-      {
-        name: '并行wrap003',
-        type: 'parallel_wrap',
-        childNodeNames: [
-          '并行wrap003-001',
-          '并行wrap003-002',
-          '并行wrap003-003',
-        ]
-      },
-      {
-        name: '并行wrap003-001',
-        type: 'parallel',
-      }, {
-        name: '并行wrap003-002',
-        type: 'parallel',
-      }, {
-        name: '并行wrap003-003',
-        type: 'parallel',
-      },
-      {
-        name: '并行wrap001-003',
-        type: 'parallel',
-      }, {
-        name: '并行wrap001-004',
-        type: 'parallel',
-      }, {
-        name: '并行wrap001-005',
-        type: 'parallel',
-      }, {
-        name: '并行wrap001-006',
-        type: 'parallel',
-      }, {
-        name: '并行wrap001-007',
-        type: 'parallel',
-      }, {
-        name: '并行wrap001-008',
-        type: 'parallel',
-      }, {
-        name: '并行wrap001-009',
-        type: 'parallel',
-      },
-      {
-        name: '流程结束',
-        type: 'end'
-      }
+      name: '流程结束',
+      code: '流程结束',
+      type: 'end'
+    }
     ];
 
     return {nodeData};

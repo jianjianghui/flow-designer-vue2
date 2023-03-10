@@ -16,7 +16,7 @@
       </a-affix>
     </div>
     <div :style="'transform: scale('+zoomScale/100+'); transform-origin: 50% 0px 0px;'" class="box-scale">
-      <node-wrap :node-config="{node:nodeHandler.getStartNode()}" :node-handler="nodeHandler"/>
+      <node-wrap v-if="done" :node-config="{node:nodeHandler.getStartNode()}" :node-handler="nodeHandler"/>
     </div>
   </section>
 </template>
@@ -24,6 +24,7 @@
 <script>
 import NodeHandler from "@/components/flow/designer/NodeHandler";
 import NodeWrap from "@/components/flow/designer/NodeWrap";
+import {nextTick, ref} from "vue";
 
 export default {
   name: "NodeContainer",
@@ -37,15 +38,35 @@ export default {
     }
   },
   setup(props) {
+    /**
+     *
+     * @type {NodeHandler}
+     */
     let nodeHandler = new NodeHandler(props.nodeData);
-    return {nodeHandler};
+    let done = ref(true);
+
+    nodeHandler.setRefresh(() => {
+      done.value = false;
+      nextTick(() => {
+        done.value = true;
+      })
+    });
+
+    return {nodeHandler, done};
   },
   methods: {
     zoom(num) {
       this.zoomScale += num;
-    },
-
-
+    }
+  },
+  mounted() {
+    /**
+     * @type {NodeHandler}
+     */
+    // let nodeHandler = this.nodeHandler;
+    // setTimeout(() => {
+    //   nodeHandler.deleteNode()
+    // }, 500)
   }
 }
 </script>
@@ -263,5 +284,38 @@ export default {
 
 }
 
+
+.add-node-box {
+  width: 350px;
+  text-align: center;
+  display: block;
+}
+
+.add-node-item {
+  display: inline-flex;
+  align-items: center;
+  margin: 5px 5px;
+  cursor: pointer;
+  padding: 10px 15px;
+  border: 1px solid #f8f9f9;
+  background-color: #f8f9f9;
+  border-radius: 10px;
+  width: 150px;
+  position: relative;
+
+  &:hover {
+    background-color: #fff;
+    box-shadow: 0 0 15px 0 #ccc;
+  }
+
+  .icon {
+    display: inline-flex;
+    font-size: 25px;
+    padding: 5px;
+    border: 1px solid #dedfdf;
+    border-radius: 14px;
+    margin-right: 10px;
+  }
+}
 
 </style>

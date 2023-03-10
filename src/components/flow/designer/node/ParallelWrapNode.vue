@@ -4,21 +4,21 @@
       <div class="branch-box">
         <div class="add-branch">
           <!--          <a-button shape="round" size="small" style="background-color: #42b983;border-color: #42b983;"-->
-          <a-button shape="round"  style="color: #1890ff;">
+          <a-button shape="round" style="color: #1890ff;">
             添加并行
           </a-button>
         </div>
-        <template v-for="(childNodeName,index) of childNodeNames">
-          <div :key="childNodeName" class="branch-item">
+        <template v-for="(childNodeCode,index) of childNodeCodes">
+          <div :key="childNodeCode" class="branch-item">
             <div class="branch-item-line"></div>
             <component :is="NodeWrap"
-                       v-if="nodeHandler.hasNode(childNodeName)"
-                       :node-config="{node:nodeHandler.getNode(childNodeName)}"
+                       v-if="nodeHandler.hasNode(childNodeCode)"
+                       :node-config="{node:nodeHandler.getNode(childNodeCode)}"
                        :node-handler="nodeHandler"/>
             <div v-if="index===0" class="top-left-cover-line"></div>
             <div v-if="index===0" class="bottom-left-cover-line"></div>
-            <div v-if="index===childNodeNames.length-1" class="top-right-cover-line"></div>
-            <div v-if="index===childNodeNames.length-1" class="bottom-right-cover-line"></div>
+            <div v-if="index===childNodeCodes.length-1" class="top-right-cover-line"></div>
+            <div v-if="index===childNodeCodes.length-1" class="bottom-right-cover-line"></div>
           </div>
         </template>
       </div>
@@ -49,9 +49,9 @@ export default {
      * @type {NodeItem}
      */
     let node = props.node;
-    let childNodeNames = node.childNodeNames;
+    let childNodeCodes = node.childNodeCodes;
 
-    return {childNodeNames}
+    return {childNodeCodes}
   }
 }
 </script>

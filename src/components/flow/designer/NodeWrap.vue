@@ -6,11 +6,12 @@
       </div>
 
       <div v-if="type !== NodeType.END">
-       <add-node/>
+        <add-node :node="node" :node-handler="nodeHandler"/>
       </div>
     </div>
 
-    <node-wrap v-if="nodeHandler.hasNextNode(node.name)" :node-config="{node:nodeHandler.getNextNode(node.name)}"
+    <node-wrap v-if="node.nextNodeCode && nodeHandler.hasNextNode(node.code)"
+               :node-config="{node:nodeHandler.getNextNode(node.code)}"
                :node-handler="nodeHandler"/>
   </div>
 </template>
@@ -45,12 +46,12 @@ export default {
     let component = nodeType.component;
 
     const uiStyle = {};
-    [NodeType.START].forEach(o=>uiStyle[o] = 'start-node-box');
+    [NodeType.START].forEach(o => uiStyle[o] = 'start-node-box');
     // [NodeType.END].forEach(o=>uiStyle[o] = '');
-    [NodeType.CHECK,NodeType.PARALLEL,NodeType.JUDGE].forEach(o=>uiStyle[o] = 'node-box');
-    [NodeType.PARALLEL_WRAP,NodeType.JUDGE_WRAP].forEach(o=>uiStyle[o] = 'wrap-box');
+    [NodeType.CHECK, NodeType.PARALLEL, NodeType.JUDGE].forEach(o => uiStyle[o] = 'node-box');
+    [NodeType.PARALLEL_WRAP, NodeType.JUDGE_WRAP].forEach(o => uiStyle[o] = 'wrap-box');
 
-    return {mode, type, component, node: ref(node),uiStyle};
+    return {mode, type, component, node: ref(node), uiStyle};
   }
 }
 </script>
