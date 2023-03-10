@@ -43,6 +43,13 @@ class NodeItem {
      */
     childNodeNames;
 
+
+    /**
+     * 节点错误内容
+     * @type {string}
+     */
+    error;
+
     constructor(name, content, type, data, nextNodeName, childNodeNames) {
         this.name = name;
         this.content = content;

@@ -4,8 +4,7 @@
       <div class="branch-box">
         <div class="add-branch">
           <!--          <a-button shape="round" size="small" style="background-color: #42b983;border-color: #42b983;"-->
-          <a-button shape="round" size="small" style="color: #1890ff;"
-          >
+          <a-button shape="round"  style="color: #1890ff;">
             添加并行
           </a-button>
         </div>
@@ -23,6 +22,7 @@
           </div>
         </template>
       </div>
+
     </div>
 
   </div>

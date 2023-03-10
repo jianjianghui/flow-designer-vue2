@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="node">
+    <div :class="node.error?'error':''" class="node" @click="click">
       <!--      <a-icon theme="filled" type="code"/>-->
       <!--      <a-icon theme="filled" type="control"/>-->
       <!--      &lt;!&ndash;  触发器    &ndash;&gt;-->
@@ -9,22 +9,44 @@
 
       <div class="title">
         <span> <a-icon fill="" theme="filled" type="flag"/></span>
-        <span> 上报人</span>
-        <span class="title-right"> <a-icon class="close" type="close" @click="close"/></span>
+        <span> {{ node.name }}</span>
+        <!--        <span v-if="false" class="title-right"> <a-icon class="close" type="close" @click="close"/></span>-->
       </div>
       <div class="content">
         <span class="content-main">
-          <span style="padding-left: 5px">1234</span>
+           <span class="error-tooltip">
+          <a-tooltip>
+            <template slot="title">
+              {{ node.error }}
+            </template>
+            <a-icon theme="filled" type="warning"/>
+          </a-tooltip>
         </span>
-        <span class="content-right"> <a-icon type="right"/></span>
+          <span style="padding-left: 5px">{{ node.name }}</span>
+        </span>
+        <!--        <span v-if="false" class="content-right" @click.stop="more"> <a-icon type="right"/></span>-->
       </div>
     </div>
+    <a-drawer
+        :after-visible-change="change"
+        :closable="true"
+        :title="node.name"
+        :visible="visible"
+        :width="720"
+        placement="right"
+        @close="hideDrawer"
+    >
+      <p>Some contents...</p>
+      <p>Some contents...</p>
+      <p>Some contents...</p>
+    </a-drawer>
   </div>
 </template>
 
 <script>
 import NodeHandler from "@/components/flow/designer/NodeHandler";
 import NodeItem from "@/components/flow/designer/NodeItem";
+import {ref} from "vue";
 
 export default {
   name: "StartNode",
@@ -33,11 +55,28 @@ export default {
     nodeHandler: NodeHandler
   },
   setup() {
+
+    // drawer support
+    let visible = ref(false);
+    let change = (val) => console.log('visible', val);
+    let showDrawer = () => visible.value = true;
+    let hideDrawer = () => visible.value = false;
+
+    return {visible: visible, showDrawer, hideDrawer, change};
   },
   methods: {
     close() {
       console.log(1)
+    },
+    click() {
+      this.showDrawer()
+    },
+    more() {
+      console.log(3)
     }
+  },
+  mounted() {
+    console.log(this.node)
   }
 }
 </script>
@@ -50,11 +89,22 @@ export default {
   border: 1px solid transparent;
   border-radius: @node-border-radius;
 
+  &:is(.error) {
+    border: 1px solid #f00;
+    box-shadow: 0 0 15px 0 rgb(255 0 0);
+
+    .error-tooltip {
+      display: inline-block;
+    }
+  }
+
   .title .close {
     display: none;
+    color: #fff;
 
     &:hover {
-      color: red;
+      color: #ccc;
+
     }
   }
 
@@ -68,13 +118,16 @@ export default {
 
   }
 
+  &:hover .content .content-right {
+    display: flex;
+  }
+
 }
 
 .title {
-  height: 18px;
   border-top-left-radius: @node-border-radius;
   border-top-right-radius: @node-border-radius;
-  padding-left: 15px;
+  padding: 5px 15px;
   background-color: @node-bg-color;
   color: white;
   font-size: 12px;
@@ -87,25 +140,38 @@ export default {
 
 
 .content {
+  position: relative;
   display: flex;
-  height: 54px;
+  padding: 18px;
+  font-size: 15px;
   border-bottom-left-radius: @node-border-radius;
   border-bottom-right-radius: @node-border-radius;
 
 
   .content-right {
     position: absolute;
-    display: flex;
     align-items: center;
+    top: 0;
     right: 5px;
     height: 54px;
+    color: #ccc;
+    display: none;
+  }
 
+  .content-right:hover {
+    color: #000;
   }
 
   .content-main {
     display: flex;
     align-items: center;
   }
+}
+
+.error-tooltip {
+  margin-left: 5px;
+  color: #f24815;
+  display: none;
 }
 
 

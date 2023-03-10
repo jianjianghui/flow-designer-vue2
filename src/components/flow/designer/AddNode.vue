@@ -3,7 +3,7 @@
   <div class="add-node-btn-box">
     <div class="add-node-btn">
       <div class="add-node-popover-body">
-        <a-popover v-model="visible" placement="right" trigger="click">
+        <a-popover v-model="visible" placement="rightTop" trigger="click">
           <template #title>
             <span>Title</span>
             <a slot="content" @click="hide">Close</a>
@@ -31,7 +31,6 @@ export default {
   },
   methods: {
     hide() {
-      console.log(111);
       this.visible = false;
     },
   },

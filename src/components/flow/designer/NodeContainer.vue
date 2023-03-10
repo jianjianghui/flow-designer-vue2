@@ -81,7 +81,6 @@ export default {
 
   .node-wrap {
     text-align: center;
-    text-align: center;
     display: inline-flex;
     width: 100%;
     flex-flow: column wrap;
@@ -97,11 +96,12 @@ export default {
     position: relative;
     width: 220px;
     min-height: 72px;
+    max-height: 120px;
     flex-shrink: 0;
     background: rgb(255, 255, 255);
     border-radius: @node-border-radius;
     cursor: pointer;
-    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .1);
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, .1);
   }
 
   .start-node-box {
@@ -118,6 +118,7 @@ export default {
   }
 
   .node-box::before {
+    z-index: -1;
     content: "";
     position: absolute;
     top: -12px;
@@ -217,7 +218,7 @@ export default {
     justify-content: center;
     padding: 0 10px;
     position: absolute;
-    top: -12px;
+    top: -16px;
     left: 50%;
     transform: translateX(-50%);
     transform-origin: center center;
