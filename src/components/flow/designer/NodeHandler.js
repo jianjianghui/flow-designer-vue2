@@ -339,12 +339,7 @@ class NodeHandler {
             this.#addNode(node);
 
             // branch
-            if (source.isBranchNode()) {
-                this.#branchNodeMap.set(node.code, source.code)
-            }
-            if (this.#branchNodeMap.has(source.code)) {
-                this.#branchNodeMap.set(node.code, this.#branchNodeMap.get(source.code))
-            }
+            this.#setBranchMap(source, node)
 
             // 如果source有后续节点，则跟新增的节点进行绑定
             if (target) {
@@ -360,6 +355,9 @@ class NodeHandler {
 
             this.#addWrapNode(nodeWrap, nodes)
             let nodeWrapCode = nodeWrap.code;
+
+            // branch
+            this.#setBranchMap(source, nodeWrap)
 
             if (target) {
                 this.#updateNextNodeCode(nodeWrap, target.code);
@@ -392,6 +390,8 @@ class NodeHandler {
         let nodeWrap = nodes[0];
         let node1 = nodes[1];
         this.#addWrapNode(nodeWrap, nodes)
+        // branch
+        this.#setBranchMap(source, nodeWrap)
         let nodeWrapCode = nodeWrap.code;
         let sourcePreNode = this.getPreNode(sourceCode);
 
@@ -496,6 +496,15 @@ class NodeHandler {
     //-------------------------------------------
     // 以下方法非必要请不要修改 ：：：：基础能力API
     //-------------------------------------------
+
+    #setBranchMap(source, node) {
+        if (source.isBranchNode()) {
+            this.#branchNodeMap.set(node.code, source.code)
+        }
+        if (this.#branchNodeMap.has(source.code)) {
+            this.#branchNodeMap.set(node.code, this.#branchNodeMap.get(source.code))
+        }
+    }
 
     #addWrapNode(nodeWrap, nodes) {
         this.#addNode(nodeWrap);

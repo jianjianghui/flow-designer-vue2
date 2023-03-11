@@ -15,6 +15,7 @@ export default {
   },
   setup: () => {
     //TODO API
+    // JSON.stringify([...nodeHandler.map().node.values()])
     let nodeData = [];
     return {nodeData};
   }
