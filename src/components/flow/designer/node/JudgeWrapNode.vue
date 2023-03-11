@@ -3,9 +3,7 @@
     <div class="branch-wrap">
       <div class="branch-box">
         <div class="add-branch">
-          <a-button shape="round" style="color: rgb(113, 141, 255);" @click="addBranch">
-            添加分支
-          </a-button>
+          <a-button shape="round" style="color: #15bc83;" @click="addBranch">添加条件</a-button>
         </div>
         <template v-for="(childNodeCode,index) of childNodeCodes">
           <div :key="childNodeCode" class="branch-item">
@@ -23,9 +21,7 @@
           </div>
         </template>
       </div>
-
     </div>
-
   </div>
 </template>
 
@@ -35,7 +31,7 @@ import NodeHandler from "@/components/flow/designer/NodeHandler";
 import NodeWrap from "@/components/flow/designer/NodeWrap.vue";
 
 export default {
-  name: "ParallelWrapNode",
+  name: "JudgeWrapNode",
   computed: {
     NodeWrap() {
       return NodeWrap
@@ -56,7 +52,7 @@ export default {
   },
   methods: {
     addBranch() {
-      this.nodeHandler.addBranch(this.node.code, '分支')
+      this.nodeHandler.addBranch(this.node.code, '条件')
     }
   }
 }

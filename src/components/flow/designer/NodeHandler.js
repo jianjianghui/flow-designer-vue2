@@ -257,7 +257,7 @@ class NodeHandler {
     }
 
     /**
-     *
+     * 是否拥有包装节点
      * @param nodeCode
      */
     hasWrapNode(nodeCode) {
@@ -329,7 +329,6 @@ class NodeHandler {
         }
 
         let nextNodeCode = source.nextNodeCode;
-
         let target = this.getNode(nextNodeCode);
 
         let type = option.type;
@@ -357,7 +356,6 @@ class NodeHandler {
 
         if (nodeType.mode === 'wrap') {
             let nodes = NodeType.createWrap(type);
-
             let nodeWrap = nodes[0];
 
             this.#addWrapNode(nodeWrap, nodes)
@@ -368,7 +366,6 @@ class NodeHandler {
             }
             this.#updateNextNodeCode(source, nodeWrapCode);
         }
-
 
         this.refresh();
     }
@@ -452,7 +449,6 @@ class NodeHandler {
     deleteNode(nodeCode) {
         this.#deleteNode0(nodeCode)
         this.refresh();
-
     }
 
     /**
@@ -472,7 +468,7 @@ class NodeHandler {
             throw new Error('【flow-designer】NodeHandler移动分支节点出错: 位移数出错：' + newIndex)
         }
         let childNodeCode = childNodeCodes[newIndex];
-        childNodeCodes[newIndex] = childNodeCodes.splice(oldIndex, 1, childNodeCode)[0]
+        childNodeCodes[newIndex] = childNodeCodes.splice(oldIndex, 1, childNodeCode)[0];
         this.refresh();
     }
 
@@ -486,9 +482,10 @@ class NodeHandler {
         if (!node.isWrapNode()) {
             throw new Error('【flow-designer】NodeHandler 新增分支出错，只有wrap节点才可以创建分支:' + nodeCode)
         }
+
         let branchType = NodeType.getBranchType(node.type);
         let nodeItem = NodeType.createNode(branchType);
-        nodeItem.name = namePrefix + node.childNodeCodes.length;
+        nodeItem.name = namePrefix + (node.childNodeCodes.length + 1);
         nodeItem.code = nodeCode + nodeItem.name;
         this.#addNode(nodeItem, null, nodeCode);
 
@@ -505,6 +502,7 @@ class NodeHandler {
         let nodeWrapCode = nodeWrap.code;
         for (let i = 1; i < nodes.length; i++) {
             let node = nodes[i];
+            node.name = node.name + (nodeWrap.childNodeCodes.length + 1);
             node.code = nodeWrapCode + node.name;
             this.#addNode(node);
             this.#parentNodeMap.set(node.code, nodeWrapCode)

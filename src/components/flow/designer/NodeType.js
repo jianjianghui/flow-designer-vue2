@@ -138,22 +138,22 @@ function initNodeTypes() {
         () => {
             return [
                 new NodeItem('并行分支', '并行分支', '请配置延时等待', NodeType.PARALLEL_WRAP, null, null, []),
-                new NodeItem('分支1', 'NodeHandler Automatic generated', '并行任务（同时进行）', NodeType.PARALLEL),
-                new NodeItem('分支2', 'NodeHandler Automatic generated', '并行任务（同时进行）', NodeType.PARALLEL),
+                new NodeItem('分支', 'NodeHandler Automatic generated', '并行任务（同时进行）', NodeType.PARALLEL),
+                new NodeItem('分支', 'NodeHandler Automatic generated', '并行任务（同时进行）', NodeType.PARALLEL)
             ];
         }, NodeType.PARALLEL)
     NodeType.registerNodeType(NodeType.PARALLEL, "single", "ParallelNode",
         () => new NodeItem('NodeHandler Automatic generated', 'NodeHandler Automatic generated', '并行任务（同时进行）', NodeType.PARALLEL))
 
-    NodeType.registerNodeType(NodeType.JUDGE_WRAP, "wrap", "ParallelWrapNode",
+    NodeType.registerNodeType(NodeType.JUDGE_WRAP, "wrap", "JudgeWrapNode",
         () => {
             return [
                 new NodeItem('条件分支', '条件分支', '请配置延时等待', NodeType.JUDGE_WRAP, null, null, []),
-                new NodeItem('条件1', 'NodeHandler Automatic generated', null, NodeType.JUDGE),
-                new NodeItem('条件2', 'NodeHandler Automatic generated', null, NodeType.JUDGE),
+                new NodeItem('条件', 'NodeHandler Automatic generated', null, NodeType.JUDGE),
+                new NodeItem('条件', 'NodeHandler Automatic generated', null, NodeType.JUDGE)
             ];
         }, NodeType.JUDGE)
-    NodeType.registerNodeType(NodeType.JUDGE, "single", "ParallelNode",
+    NodeType.registerNodeType(NodeType.JUDGE, "single", "JudgeNode",
         () => new NodeItem('NodeHandler Automatic generated', 'NodeHandler Automatic generated', null, NodeType.JUDGE))
 
 }

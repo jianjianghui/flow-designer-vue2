@@ -11,6 +11,7 @@
           <span class="title-main">{{ node.name }}</span>
           <span class="title-right">
             <a-icon class="close" type="close" @click.stop="close"/>
+            <span class="info">优先级{{ option.index + 1 }}</span>
           </span>
         </div>
         <div class="content">
@@ -48,7 +49,7 @@ import NodeItem from "@/components/flow/designer/NodeItem";
 import {ref} from "vue";
 
 export default {
-  name: "ParallelNode",
+  name: "JudgeNode",
   props: {
     option: {left: Boolean, right: Boolean, index: Number},
     node: NodeItem,
@@ -56,7 +57,7 @@ export default {
   },
   data() {
     return {
-      defaultContent: '无'
+      defaultContent: '请设置条件'
     }
   },
   setup() {
@@ -91,7 +92,7 @@ export default {
 
 <style lang="less" scoped>
 @node-border-radius: 5px;
-@node-bg-color: rgb(113, 141, 255);
+@node-bg-color: #15bc83;
 .node {
   text-align: left;
   border: 1px solid transparent;
