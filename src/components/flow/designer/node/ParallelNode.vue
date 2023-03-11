@@ -11,7 +11,7 @@
           <span class="title-main">{{ node.name }}</span>
           <span class="title-right">
             <a-icon class="close" type="close" @click.stop="close"/>
-            <span class="info">优先级1</span>
+            <span class="info">优先级{{ option.index + 1 }}</span>
           </span>
         </div>
         <div class="content">
@@ -51,7 +51,7 @@ import {ref} from "vue";
 export default {
   name: "ParallelNode",
   props: {
-    option: {left: Boolean, right: Boolean},
+    option: {left: Boolean, right: Boolean, index: Number},
     node: NodeItem,
     nodeHandler: NodeHandler
   },

@@ -14,7 +14,7 @@
             <component :is="NodeWrap"
                        v-if="nodeHandler.hasNode(childNodeCode)"
                        :node-config="{node:nodeHandler.getNode(childNodeCode),option:{
-                         left:index!==0,right:index !== childNodeCodes.length-1
+                         left:index!==0,right:index !== childNodeCodes.length-1,index:index
                        }}"
                        :node-handler="nodeHandler"/>
             <div v-if="index===0" class="top-left-cover-line"></div>

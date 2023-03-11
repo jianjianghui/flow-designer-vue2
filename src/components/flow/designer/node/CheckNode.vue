@@ -188,6 +188,7 @@ export default {
 
 
 .content {
+  background-color: white;
   position: relative;
   display: flex;
   font-size: 15px;
