@@ -359,8 +359,9 @@ class NodeHandler {
             let nodes = NodeType.createWrap(type);
 
             let nodeWrap = nodes[0];
-            let nodeWrapCode = nodeWrap.code;
+
             this.#addWrapNode(nodeWrap, nodes)
+            let nodeWrapCode = nodeWrap.code;
 
             if (target) {
                 this.#updateNextNodeCode(nodeWrap, target.code);
@@ -393,9 +394,8 @@ class NodeHandler {
         let nodes = NodeType.createWrap(type);
         let nodeWrap = nodes[0];
         let node1 = nodes[1];
-        let nodeWrapCode = nodeWrap.code;
         this.#addWrapNode(nodeWrap, nodes)
-
+        let nodeWrapCode = nodeWrap.code;
         let sourcePreNode = this.getPreNode(sourceCode);
 
         let lastNode = null;
@@ -423,28 +423,6 @@ class NodeHandler {
 
 
         this.refresh()
-    }
-
-    #addWrapNode(nodeWrap, nodes) {
-        this.#addNode(nodeWrap);
-        let nodeWrapCode = nodeWrap.code;
-        for (let i = 1; i < nodes.length; i++) {
-            let node = nodes[i];
-            node.code = nodeWrapCode + node.name;
-            this.#addNode(node);
-            this.#parentNodeMap.set(node.code, nodeWrapCode)
-            nodeWrap.childNodeCodes.push(node.code)
-        }
-    }
-
-    #setNodeNewCode(node) {
-        let code = node.code;
-        while (this.#nodeMap.has(node.code)) {
-            if (!NodeHandler.#codeIndex[code]) {
-                NodeHandler.#codeIndex[code] = 0;
-            }
-            node.code = code + ++NodeHandler.#codeIndex[code];
-        }
     }
 
     /**
@@ -477,6 +455,81 @@ class NodeHandler {
 
     }
 
+    /**
+     * 移动分支节点
+     */
+    moveBranchNode(branchNodeCode, offset) {
+        let node = this.getNode(branchNodeCode);
+        if (!node.isBranchNode()) {
+            throw new Error('【flow-designer】NodeHandler移动分支节点出错: 移动的节点必须是分支节点：' + branchNodeCode)
+        }
+
+        let wrapNode = this.getWrapNode(branchNodeCode);
+        let childNodeCodes = wrapNode.childNodeCodes;
+        let oldIndex = childNodeCodes.indexOf(branchNodeCode);
+        let newIndex = oldIndex + offset;
+        if (newIndex < 0 || newIndex >= childNodeCodes.length) {
+            throw new Error('【flow-designer】NodeHandler移动分支节点出错: 位移数出错：' + newIndex)
+        }
+        let childNodeCode = childNodeCodes[newIndex];
+        childNodeCodes[newIndex] = childNodeCodes.splice(oldIndex, 1, childNodeCode)[0]
+        this.refresh();
+    }
+
+    /**
+     * 新增分支
+     * @param nodeCode {string}
+     * @param namePrefix
+     */
+    addBranch(nodeCode, namePrefix) {
+        let node = this.getNode(nodeCode);
+        if (!node.isWrapNode()) {
+            throw new Error('【flow-designer】NodeHandler 新增分支出错，只有wrap节点才可以创建分支:' + nodeCode)
+        }
+        let branchType = NodeType.getBranchType(node.type);
+        let nodeItem = NodeType.createNode(branchType);
+        nodeItem.name = namePrefix + node.childNodeCodes.length;
+        nodeItem.code = nodeCode + nodeItem.name;
+        this.#addNode(nodeItem, null, nodeCode);
+
+        this.refresh();
+    }
+
+
+    //-------------------------------------------
+    // 以下方法非必要请不要修改 ：：：：基础能力API
+    //-------------------------------------------
+
+    #addWrapNode(nodeWrap, nodes) {
+        this.#addNode(nodeWrap);
+        let nodeWrapCode = nodeWrap.code;
+        for (let i = 1; i < nodes.length; i++) {
+            let node = nodes[i];
+            node.code = nodeWrapCode + node.name;
+            this.#addNode(node);
+            this.#parentNodeMap.set(node.code, nodeWrapCode)
+            nodeWrap.childNodeCodes.push(node.code)
+        }
+    }
+
+    #addNode(node, branchNodeCode, wrapNodeCode) {
+        this.#setNodeNewCode(node)
+
+        let code = node.code;
+        this.#nodeMap.set(code, node);
+        if (node.nextNodeCode) {
+            this.#addPre(node)
+        }
+
+        if (branchNodeCode) {
+            this.#branchNodeMap.set(code, branchNodeCode);
+        }
+        if (wrapNodeCode) {
+            this.getNode(wrapNodeCode).childNodeCodes.push(code)
+            this.#parentNodeMap.set(code, wrapNodeCode);
+        }
+    }
+
     #deleteNode0(nodeCode) {
         if (!this.hasNode(nodeCode)) {
             throw new Error('【flow-designer】NodeHandler删除节点出错: 要删除的节点不存在:' + nodeCode)
@@ -485,8 +538,7 @@ class NodeHandler {
 
         //wrap node
         if (node.isWrapNode()) {
-            let wrapNode = node;
-            wrapNode.childNodeCodes.forEach(childNodeCode => this.#deleteNode0(childNodeCode))
+            node.childNodeCodes.forEach(childNodeCode => this.#deleteNode0(childNodeCode))
         }
 
         // branch node
@@ -554,48 +606,17 @@ class NodeHandler {
         this.#branchNodeMap.delete(nodeCode)
     }
 
-    /**
-     * 移动分支节点
-     */
-    moveBranchNode(branchNodeCode, offset) {
-        let node = this.getNode(branchNodeCode);
-        if (!node.isBranchNode()) {
-            throw new Error('【flow-designer】NodeHandler移动分支节点出错: 移动的节点必须是分支节点：' + branchNodeCode)
-        }
 
-        let wrapNode = this.getWrapNode(branchNodeCode);
-        let childNodeCodes = wrapNode.childNodeCodes;
-        let oldIndex = childNodeCodes.indexOf(branchNodeCode);
-        let newIndex = oldIndex + offset;
-        if (newIndex < 0 || newIndex >= childNodeCodes.length) {
-            throw new Error('【flow-designer】NodeHandler移动分支节点出错: 位移数出错：' + newIndex)
-        }
-        let childNodeCode = childNodeCodes[newIndex];
-        childNodeCodes[newIndex] = childNodeCodes.splice(oldIndex, 1, childNodeCode)[0]
-        this.refresh();
-    }
-
-
-    //-------------------------------------------
-    // 以下方法非必要请不要修改 ：：：：基础能力API
-    //-------------------------------------------
-
-    #addNode(node, branchNodeCode, wrapNodeCode) {
-        this.#setNodeNewCode(node)
-
+    #setNodeNewCode(node) {
         let code = node.code;
-        this.#nodeMap.set(code, node);
-        if (node.nextNodeCode) {
-            this.#addPre(node)
-        }
-
-        if (branchNodeCode) {
-            this.#branchNodeMap.set(code, branchNodeCode);
-        }
-        if (wrapNodeCode) {
-            this.#parentNodeMap.set(code, wrapNodeCode);
+        while (this.#nodeMap.has(node.code)) {
+            if (!NodeHandler.#codeIndex[code]) {
+                NodeHandler.#codeIndex[code] = 0;
+            }
+            node.code = code + ++NodeHandler.#codeIndex[code];
         }
     }
+
 
     #check(set, node) {
         if (node.type === NodeType.END) {

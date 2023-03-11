@@ -57,7 +57,7 @@ export default {
   },
   methods: {
     addBranch() {
-      console.log(1234)
+      this.nodeHandler.addBranch(this.node.code, '并行')
     }
   }
 }

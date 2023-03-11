@@ -21,6 +21,7 @@ class NodeType {
 
     static #map = new Map();
     static #funcMap = new Map();
+    static #branchMap = new Map();
 
     /**
      * 节点名称
@@ -57,13 +58,18 @@ class NodeType {
      * @param mode  {'single'|'wrap'} 节点类型模式
      * @param component {String} 组件名
      * @param createFunc {function():NodeItem|NodeType[]}
+     * @param branchTypeName  分支类型名
      */
     static registerNodeType(name, mode, component, createFunc = () => {
         throw new Error('【flow-designer】NodeType: 类型' + name + '不支持创建节点')
-    }) {
+    }, branchTypeName = '') {
         let nodeType = new NodeType(name, mode, component);
         this.#map.set(name, nodeType);
         this.#funcMap.set(name, createFunc);
+        if (branchTypeName) {
+            this.#branchMap.set(name, branchTypeName);
+        }
+
         return nodeType;
     }
 
@@ -74,6 +80,11 @@ class NodeType {
      */
     static getNodeType(typeName) {
         return this.#map.get(typeName)
+    }
+
+
+    static getBranchType(wrapTypeName) {
+        return this.#branchMap.get(wrapTypeName);
     }
 
     /**
@@ -130,8 +141,9 @@ function initNodeTypes() {
                 new NodeItem('分支1', 'NodeHandler Automatic generated', '并行任务（同时进行）', NodeType.PARALLEL),
                 new NodeItem('分支2', 'NodeHandler Automatic generated', '并行任务（同时进行）', NodeType.PARALLEL),
             ];
-        })
-    NodeType.registerNodeType(NodeType.PARALLEL, "single", "ParallelNode")
+        }, NodeType.PARALLEL)
+    NodeType.registerNodeType(NodeType.PARALLEL, "single", "ParallelNode",
+        () => new NodeItem('NodeHandler Automatic generated', 'NodeHandler Automatic generated', '并行任务（同时进行）', NodeType.PARALLEL))
 
     NodeType.registerNodeType(NodeType.JUDGE_WRAP, "wrap", "ParallelWrapNode",
         () => {
@@ -140,8 +152,9 @@ function initNodeTypes() {
                 new NodeItem('条件1', 'NodeHandler Automatic generated', null, NodeType.JUDGE),
                 new NodeItem('条件2', 'NodeHandler Automatic generated', null, NodeType.JUDGE),
             ];
-        })
-    NodeType.registerNodeType(NodeType.JUDGE, "single", "ParallelNode")
+        }, NodeType.JUDGE)
+    NodeType.registerNodeType(NodeType.JUDGE, "single", "ParallelNode",
+        () => new NodeItem('NodeHandler Automatic generated', 'NodeHandler Automatic generated', null, NodeType.JUDGE))
 
 }
 
