@@ -40,14 +40,14 @@ class NodeItem {
 
     /**
      * 后续节点
-     * @type {'nodeName'}
+     * @type {'nodeCode'}
      */
     nextNodeCode;
 
     /**
      * 子节点
      * @desc wrap类型的节点才会需要该字段，该字段是有意义的
-     * @type { 'nodeName'[]}
+     * @type { 'nodeCode'[]}
      */
     childNodeCodes;
 

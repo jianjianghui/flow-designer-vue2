@@ -72,17 +72,16 @@ export default {
   },
   methods: {
     close() {
-      console.log(12)
       this.nodeHandler.deleteNode(this.node.code)
     },
     click() {
       this.showDrawer()
     },
     toLeft() {
-      console.log(2)
+      this.nodeHandler.moveBranchNode(this.node.code, -1)
     },
     toRight() {
-      console.log(3)
+      this.nodeHandler.moveBranchNode(this.node.code, +1)
     }
   },
   mounted() {
