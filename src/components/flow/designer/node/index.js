@@ -5,6 +5,9 @@ import ParallelWrapNode from "@/components/flow/designer/node/ParallelWrapNode.v
 import CheckNode from "@/components/flow/designer/node/CheckNode.vue";
 import JudgeWrapNode from "@/components/flow/designer/node/JudgeWrapNode.vue";
 import JudgeNode from "@/components/flow/designer/node/JudgeNode.vue";
+import CCNode from "@/components/flow/designer/node/CCNode.vue";
+import TriggerNode from "@/components/flow/designer/node/TriggerNode.vue";
+import DelayNode from "@/components/flow/designer/node/DelayNode.vue";
 
 
 export default {
@@ -14,5 +17,8 @@ export default {
     ParallelWrapNode,
     CheckNode,
     JudgeNode,
-    JudgeWrapNode
+    JudgeWrapNode,
+    CCNode,
+    TriggerNode,
+    DelayNode
 }

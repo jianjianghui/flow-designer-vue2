@@ -123,13 +123,13 @@ function initNodeTypes() {
     NodeType.registerNodeType(NodeType.CHECK, "single", "CheckNode",
         () => new NodeItem('审批人', '审批人', null, NodeType.CHECK));
 
-    NodeType.registerNodeType(NodeType.CC, "single", "CheckNode",
+    NodeType.registerNodeType(NodeType.CC, "single", "CCNode",
         () => new NodeItem('抄送人', '抄送人', null, NodeType.CC));
 
-    NodeType.registerNodeType(NodeType.TRIGGER, "single", "CheckNode",
+    NodeType.registerNodeType(NodeType.TRIGGER, "single", "TriggerNode",
         () => new NodeItem('触发器', '触发器', null, NodeType.TRIGGER));
 
-    NodeType.registerNodeType(NodeType.DELAY, "single", "CheckNode",
+    NodeType.registerNodeType(NodeType.DELAY, "single", "DelayNode",
         () => new NodeItem('延迟等待', '延迟等待', null, NodeType.DELAY));
 
     NodeType.registerNodeType(NodeType.END, "single", "EndNode")

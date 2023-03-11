@@ -2,7 +2,7 @@
   <div>
     <div :class="node.error?'error':''" class="node" @click="click">
       <div class="title">
-        <span> <a-icon :component="icon"/></span>
+        <span> <a-icon type="mail"/></span>
         <span> {{ node.name }}</span>
         <span class="title-right"> <a-icon class="close" type="close" @click.stop="close"/></span>
       </div>
@@ -63,7 +63,7 @@ import {ref} from "vue";
 import NodeType from "@/components/flow/designer/NodeType";
 
 export default {
-  name: "CheckNode",
+  name: "CCNode",
   props: {
     node: NodeItem,
     nodeHandler: NodeHandler
@@ -74,15 +74,6 @@ export default {
     }
   },
   setup({node, nodeHandler}) {
-
-    // icon;
-    let icon = {
-      template: `
-          <svg  viewBox="0 0 1024 1024">
-            <path fill=" currentColor" d="M288 320a224 224 0 1 0 448 0 224 224 0 1 0-448 0zm544 608H160a32 32 0 0 1-32-32v-96a160 160 0 0 1 160-160h448a160 160 0 0 1 160 160v96a32 32 0 0 1-32 32z"></path>
-          </svg>
-      `
-    };
 
     // drawer support
     let visibleDrawer = ref(false);
@@ -108,7 +99,7 @@ export default {
     }
     let wrapNodeR = {nodes, wrapNode};
 
-    return {icon, ...drawer, ...popover, ...wrapNodeR};
+    return {...drawer, ...popover, ...wrapNodeR};
   },
   methods: {
     close() {
@@ -128,7 +119,7 @@ export default {
 
 <style lang="less" scoped>
 @node-border-radius: 5px;
-@node-bg-color: rgb(255, 148, 62);
+@node-bg-color: rgb(50, 150, 250);
 
 
 .node {

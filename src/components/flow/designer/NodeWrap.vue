@@ -47,8 +47,7 @@ export default {
 
     const uiStyle = {};
     [NodeType.START].forEach(o => uiStyle[o] = 'start-node-box');
-    // [NodeType.END].forEach(o=>uiStyle[o] = '');
-    [NodeType.CHECK, NodeType.PARALLEL, NodeType.JUDGE].forEach(o => uiStyle[o] = 'node-box');
+    [NodeType.CHECK, NodeType.PARALLEL, NodeType.JUDGE, NodeType.TRIGGER, NodeType.DELAY].forEach(o => uiStyle[o] = 'node-box');
     [NodeType.PARALLEL_WRAP, NodeType.JUDGE_WRAP].forEach(o => uiStyle[o] = 'wrap-box');
 
     return {mode, type, component, node: ref(node), uiStyle};

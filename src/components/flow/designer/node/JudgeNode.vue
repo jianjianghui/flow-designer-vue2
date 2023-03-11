@@ -7,7 +7,7 @@
 
       <div class="node-content">
         <div class="title">
-          <span class="title-main" style="margin-right: 5px"> <a-icon type="control"/></span>
+          <span class="title-main" style="margin-right: 5px"> <a-icon type="apartment"/></span>
           <span class="title-main">{{ node.name }}</span>
           <span class="title-right">
             <a-icon class="close" type="close" @click.stop="close"/>
