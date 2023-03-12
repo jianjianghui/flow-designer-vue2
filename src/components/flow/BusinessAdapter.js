@@ -67,6 +67,7 @@ class BusinessAdapter {
      * 校验数据
      * @desc 校验不通过时应填充{@link NodeItem#error} 信息
      * @param node {NodeItem}
+     * @return {{code:number,msg:string}}
      */
     verifyNode(node) {
         node;
