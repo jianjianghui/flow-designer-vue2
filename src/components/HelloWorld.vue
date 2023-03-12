@@ -15,7 +15,6 @@ export default {
     msg: String
   },
   setup: () => {
-    //TODO API
     // JSON.stringify([...nodeHandler.map().node.values()])
     let businessAdapter = BusinessAdapter.getBusinessAdapter();
     let nodeData = businessAdapter.getNodeData({workflowId: 'xxx'});
