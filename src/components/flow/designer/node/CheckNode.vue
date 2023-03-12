@@ -139,7 +139,7 @@ export default {
 
   &:is(.error) {
     border: 1px solid #f00;
-    box-shadow: 0 0 15px 0 rgb(255 0 0);
+    box-shadow: 0 0 5px 0 #f56c6c;
 
     .error-tooltip {
       display: inline-block;
