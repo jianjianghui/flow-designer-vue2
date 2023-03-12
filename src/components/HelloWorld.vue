@@ -1,11 +1,12 @@
 <template>
   <div>
-    <NodeContainer :node-data="nodeData"/>
+    <NodeContainer :business-adapter="businessAdapter" :node-data="nodeData"/>
   </div>
 </template>
 
 <script>
 import NodeContainer from "@/components/flow/designer/NodeContainer";
+import BusinessAdapter from "@/components/flow/BusinessAdapter";
 
 export default {
   name: 'HelloWorld',
@@ -16,8 +17,9 @@ export default {
   setup: () => {
     //TODO API
     // JSON.stringify([...nodeHandler.map().node.values()])
-    let nodeData = [];
-    return {nodeData};
+    let businessAdapter = BusinessAdapter.getBusinessAdapter();
+    let nodeData = businessAdapter.getNodeData({workflowId: 'xxx'});
+    return {nodeData, businessAdapter};
   }
 }
 </script>

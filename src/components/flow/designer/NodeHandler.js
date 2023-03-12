@@ -47,9 +47,16 @@ class NodeHandler {
     #endNode;
 
     #refreshFunc;
-    #addWrap
 
-    constructor(nodeData) {
+    #addWrap;
+
+    /**
+     * 业务适配器
+     * @type {BusinessAdapter}
+     */
+    businessAdapter;
+
+    constructor(nodeData, businessAdapter) {
         if (!nodeData || !nodeData.length) {
             nodeData = [{
                 name: '上报人',
@@ -111,6 +118,11 @@ class NodeHandler {
                 nextNode = this.getNextNode(nextNode.code);
             }
         })
+
+        //-----------------------------------
+        // business adapter (业务适配器)
+        // ----------------------------------
+        this.businessAdapter = businessAdapter;
 
         window.nodeHandler = this;
     }

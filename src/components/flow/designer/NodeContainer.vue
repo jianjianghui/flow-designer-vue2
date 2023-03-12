@@ -25,12 +25,14 @@
 import NodeHandler from "@/components/flow/designer/NodeHandler";
 import NodeWrap from "@/components/flow/designer/NodeWrap";
 import {nextTick, ref} from "vue";
+import BusinessAdapter from "@/components/flow/BusinessAdapter";
 
 export default {
   name: "NodeContainer",
   components: {NodeWrap},
   props: {
-    nodeData: Array
+    nodeData: Array,
+    businessAdapter: BusinessAdapter
   },
   data() {
     return {
