@@ -25,6 +25,10 @@ class BusinessAdapter {
                 super.verifyNodeData(nodes);
             }
 
+            verifyNode(node) {
+                super.verifyNode(node);
+            }
+
             saveNode(node) {
                 super.saveNode(node);
             }
@@ -52,11 +56,20 @@ class BusinessAdapter {
     /**
      * 校验数据
      * @desc 校验不通过时应填充{@link NodeItem#error} 信息
-     * @param nodes
-     * @return VoidFunction
+     * @param nodes {NodeItem[]}
      */
     verifyNodeData(nodes) {
         nodes;
+        throw new Error('【BusinessAdapter】 Not supported, Please override the method');
+    }
+
+    /**
+     * 校验数据
+     * @desc 校验不通过时应填充{@link NodeItem#error} 信息
+     * @param node {NodeItem}
+     */
+    verifyNode(node) {
+        node;
         throw new Error('【BusinessAdapter】 Not supported, Please override the method');
     }
 
