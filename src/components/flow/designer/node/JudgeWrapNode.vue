@@ -4,6 +4,9 @@
       <div class="branch-box">
         <div class="add-branch">
           <a-button shape="round" style="color: #15bc83;" @click="addBranch">添加条件</a-button>
+          <div class="wrap-more">
+            <a-button icon="bars" type="primary" @click="showDrawer"/>
+          </div>
         </div>
         <template v-for="(childNodeCode,index) of childNodeCodes">
           <div :key="childNodeCode" class="branch-item">
@@ -22,6 +25,19 @@
         </template>
       </div>
     </div>
+    <a-drawer
+        :after-visible-change="change"
+        :closable="true"
+        :title="node.name"
+        :visible="visibleDrawer"
+        :width="720"
+        placement="right"
+        @close="hideDrawer"
+    >
+      <p>Some contents...</p>
+      <p>Some contents...</p>
+      <p>Some contents...</p>
+    </a-drawer>
   </div>
 </template>
 
@@ -29,6 +45,7 @@
 import NodeItem from "@/components/flow/designer/NodeItem";
 import NodeHandler from "@/components/flow/designer/NodeHandler";
 import NodeWrap from "@/components/flow/designer/NodeWrap.vue";
+import {ref} from "vue";
 
 export default {
   name: "JudgeWrapNode",
@@ -48,7 +65,15 @@ export default {
     let node = props.node;
     let childNodeCodes = node.childNodeCodes;
 
-    return {childNodeCodes}
+
+    // drawer support
+    let visibleDrawer = ref(false);
+    let change = (val) => console.log('visible', val);
+    let showDrawer = () => visibleDrawer.value = true;
+    let hideDrawer = () => visibleDrawer.value = false;
+    const drawer = {visibleDrawer, showDrawer, hideDrawer, change};
+
+    return {childNodeCodes, ...drawer}
   },
   methods: {
     addBranch() {
@@ -58,7 +83,17 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
+.wrap-more {
+  position: absolute;
+  right: -30px;
+  display: none;
+}
 
+.branch-wrap {
+  &:hover > .branch-box > .add-branch > .wrap-more {
+    display: inline-block;
+  }
+}
 
 </style>

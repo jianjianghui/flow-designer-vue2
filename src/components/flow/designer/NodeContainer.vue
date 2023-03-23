@@ -24,7 +24,7 @@
 <script>
 import NodeHandler from "@/components/flow/designer/NodeHandler";
 import NodeWrap from "@/components/flow/designer/NodeWrap";
-import {nextTick, ref} from "vue";
+import {ref} from "vue";
 import BusinessAdapter from "@/components/flow/BusinessAdapter";
 
 export default {
@@ -45,14 +45,7 @@ export default {
      * @type {NodeHandler}
      */
     let nodeHandler = new NodeHandler(props.nodeData);
-    let done = ref(true);
-
-    nodeHandler.setRefresh(() => {
-      done.value = false;
-      nextTick(() => {
-        done.value = true;
-      })
-    });
+    let done = ref(false);
 
     return {nodeHandler, done};
   },
@@ -62,13 +55,10 @@ export default {
     }
   },
   mounted() {
-    /**
-     * @type {NodeHandler}
-     */
-    // let nodeHandler = this.nodeHandler;
-    // setTimeout(() => {
-    //   nodeHandler.deleteNode()
-    // }, 500)
+    this.nodeHandler.setRefresh(() => {
+    });
+
+    this.done = true
   }
 }
 </script>

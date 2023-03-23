@@ -11,6 +11,7 @@
     </div>
 
     <node-wrap v-if="node.nextNodeCode && nodeHandler.hasNextNode(node.code)"
+               :key="node.nextNodeCode"
                :node-config="{node:nodeHandler.getNextNode(node.code)}"
                :node-handler="nodeHandler"/>
   </div>

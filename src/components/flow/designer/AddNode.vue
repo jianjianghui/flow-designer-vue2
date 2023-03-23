@@ -74,6 +74,7 @@ export default {
 
     let addNode = function (type) {
       nodeHandler.insertNode(node.code, {type: type})
+      this.visible = false
     }
     return {nodes, addNode};
   }
