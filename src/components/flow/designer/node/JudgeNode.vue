@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="node" @click="click">
+    <div :class="node.error?'error':''" class="node" @click="click">
       <div :class="option.left?'':'disable'" class="node-left" @click.stop="toLeft">
         <span> <a-icon v-if="option.left" class="icon" type="left"/></span>
       </div>
@@ -16,6 +16,14 @@
         </div>
         <div class="content">
           <span class="content-main">
+             <span class="error-tooltip">
+          <a-tooltip>
+            <template slot="title">
+              {{ node.error }}
+            </template>
+            <a-icon theme="filled" type="warning"/>
+          </a-tooltip>
+        </span>
                   <span v-if="node.content">{{ node.content }}</span>
           <span v-else style="color: #666;">{{ defaultContent }}</span>
         </span>
@@ -75,6 +83,7 @@ export default {
       this.nodeHandler.deleteNode(this.node.code)
     },
     click() {
+      this.nodeRef.error = null
       this.showDrawer()
     },
     toLeft() {
@@ -98,6 +107,16 @@ export default {
   border: 1px solid transparent;
   border-radius: @node-border-radius;
   display: flex;
+
+
+  &:is(.error) {
+    border: 1px solid #f00;
+    box-shadow: 0 0 5px 0 #f56c6c;
+
+    .error-tooltip {
+      display: inline-block;
+    }
+  }
 
   .title .close {
     display: none;
@@ -209,5 +228,10 @@ export default {
   }
 }
 
+.error-tooltip {
+  margin-left: 5px;
+  color: #f24815;
+  display: none;
+}
 
 </style>
