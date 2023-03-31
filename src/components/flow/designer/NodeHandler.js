@@ -610,7 +610,7 @@ class NodeHandler {
         // normal node
         // 主节点preNode，nextNode永远不可能为null, 分支节点则都有可能为null
         let preNode = this.getPreNode(nodeCode);
-        let nextNode = this.getNextNode(nodeCode);
+        let nextNode = this.hasNextNode(nodeCode) && this.getNextNode(nodeCode);
 
         //删除自身的上一步关联
         this.#preNodeMap.delete(nodeCode);

@@ -132,7 +132,7 @@ function initNodeTypes() {
     NodeType.registerNodeType(NodeType.DELAY, "single", "DelayNode",
         () => new NodeItem('延迟等待', '延迟等待', null, NodeType.DELAY));
 
-    NodeType.registerNodeType(NodeType.END, "single", "EndNode")
+    NodeType.registerNodeType(NodeType.END, "single", "EndNode");
 
     NodeType.registerNodeType(NodeType.PARALLEL_WRAP, "wrap", "ParallelWrapNode",
         () => {
@@ -141,9 +141,9 @@ function initNodeTypes() {
                 new NodeItem('分支', 'NodeHandler Automatic generated', '并行任务（同时进行）', NodeType.PARALLEL),
                 new NodeItem('分支', 'NodeHandler Automatic generated', '并行任务（同时进行）', NodeType.PARALLEL)
             ];
-        }, NodeType.PARALLEL)
+        }, NodeType.PARALLEL);
     NodeType.registerNodeType(NodeType.PARALLEL, "single", "ParallelNode",
-        () => new NodeItem('NodeHandler Automatic generated', 'NodeHandler Automatic generated', '并行任务（同时进行）', NodeType.PARALLEL))
+        () => new NodeItem('NodeHandler Automatic generated', 'NodeHandler Automatic generated', '并行任务（同时进行）', NodeType.PARALLEL));
 
     NodeType.registerNodeType(NodeType.JUDGE_WRAP, "wrap", "JudgeWrapNode",
         () => {
@@ -152,9 +152,9 @@ function initNodeTypes() {
                 new NodeItem('条件', 'NodeHandler Automatic generated', null, NodeType.JUDGE),
                 new NodeItem('条件', 'NodeHandler Automatic generated', null, NodeType.JUDGE)
             ];
-        }, NodeType.JUDGE)
+        }, NodeType.JUDGE);
     NodeType.registerNodeType(NodeType.JUDGE, "single", "JudgeNode",
-        () => new NodeItem('NodeHandler Automatic generated', 'NodeHandler Automatic generated', null, NodeType.JUDGE))
+        () => new NodeItem('NodeHandler Automatic generated', 'NodeHandler Automatic generated', null, NodeType.JUDGE));
 
 }
 
