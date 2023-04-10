@@ -596,6 +596,11 @@ class NodeHandler {
                     console.log(wrapNodePreNode.code, wrapNodePreNode.nextNodeCode)
                     this.#updateNextNodeCode(surviveChildNode, null);
                     this.#updateNextNodeCode(lastNode, wrapNodeNextNode?.code);
+
+
+                    if (wrapNodePreNode?.isBranchNode()) {
+                        this.#branchNodeMap.set(surviveNextChildNode.code, wrapNodePreNode.code)
+                    }
                     console.log(wrapNodePreNode.nextNodeCode)
                 }
 
