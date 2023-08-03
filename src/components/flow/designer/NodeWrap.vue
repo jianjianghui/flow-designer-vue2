@@ -21,7 +21,7 @@
 import NodeHandler from "@/components/flow/designer/NodeHandler";
 import NodeItem from "@/components/flow/designer/NodeItem";
 import NodeType from "@/components/flow/designer/NodeType";
-import {ref} from "vue";
+import { ref } from "vue";
 import Nodes from "@/components/flow/designer/node";
 import AddNode from "@/components/flow/designer/AddNode";
 
@@ -32,7 +32,7 @@ export default {
       return NodeType
     }
   },
-  components: {AddNode, ...Nodes},
+  components: { AddNode, ...Nodes },
   props: {
     nodeConfig: Object,
     nodeHandler: NodeHandler
@@ -47,11 +47,12 @@ export default {
     let component = nodeType.component;
 
     const uiStyle = {};
-    [NodeType.START].forEach(o => uiStyle[o] = 'start-node-box');
-    [NodeType.CHECK, NodeType.PARALLEL, NodeType.JUDGE, NodeType.TRIGGER, NodeType.DELAY].forEach(o => uiStyle[o] = 'node-box');
-    [NodeType.PARALLEL_WRAP, NodeType.JUDGE_WRAP].forEach(o => uiStyle[o] = 'wrap-box');
+    [ NodeType.START ].forEach(o => uiStyle[o] = 'start-node-box');
+    [ NodeType.CHECK, NodeType.CC, NodeType.PARALLEL, NodeType.JUDGE, NodeType.TRIGGER, NodeType.DELAY ].forEach(o => uiStyle[o] = 'node-box');
+    [ NodeType.PARALLEL_WRAP, NodeType.JUDGE_WRAP ].forEach(o => uiStyle[o] = 'wrap-box');
 
-    return {mode, type, component, node: ref(node), uiStyle};
+
+    return { mode, type, component, node: ref(node), uiStyle };
   }
 }
 </script>
